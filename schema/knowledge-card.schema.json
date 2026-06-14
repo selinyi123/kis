@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kis.local/schema/knowledge-card-0.1.0.json",
+  "title": "KnowledgeCard",
+  "description": "KIS unified knowledge asset. v0.1.0 frozen schema. Unknown fields are rejected (additionalProperties:false) per PPE contract discipline.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "content_hash", "source", "content", "enrichment", "linkage", "lifecycle", "safety"],
+  "properties": {
+    "schema_version": { "type": "string", "enum": ["0.1.0"] },
+    "id": { "type": "string", "description": "Deterministic stable id kc_<16hex> = sha256(connector|url). Idempotent across re-runs." },
+    "content_hash": { "type": "string", "description": "sha256 hex of title+body; changes when source content changes (update tracking)." },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["connector", "url", "captured_at"],
+      "properties": {
+        "connector": { "type": "string", "enum": ["github_stars", "clipboard", "web", "twitter", "zhihu", "bilibili", "xhs", "local", "rss", "reddit", "youtube"] },
+        "url": { "type": "string" },
+        "captured_at": { "type": "string" },
+        "raw_ref": { "type": "string" }
+      }
+    },
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "body_md", "lang"],
+      "properties": {
+        "title": { "type": "string" },
+        "body_md": { "type": "string" },
+        "lang": { "type": "string" },
+        "media": { "type": "array", "items": { "type": "object" } }
+      }
+    },
+    "enrichment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_level", "value_score", "value_level"],
+      "properties": {
+        "summary": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "category": { "type": "string" },
+        "topics": { "type": "array", "items": { "type": "string" } },
+        "value_score": { "type": "integer" },
+        "value_level": { "type": "string", "enum": ["cold", "warming", "usable", "ready"] },
+        "evidence_level": { "type": "string", "enum": ["heuristic", "llm", "user_confirmed"] }
+      }
+    },
+    "linkage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["projects", "related_cards", "wikilinks"],
+      "properties": {
+        "projects": { "type": "array", "items": { "type": "string" } },
+        "related_cards": { "type": "array", "items": { "type": "string" } },
+        "wikilinks": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "created_at", "updated_at", "version"],
+      "properties": {
+        "state": { "type": "string", "enum": ["inbox", "cleaned", "enriched", "linked", "archived", "stale", "quarantine"] },
+        "created_at": { "type": "string" },
+        "updated_at": { "type": "string" },
+        "last_checked_at": { "type": "string" },
+        "version": { "type": "integer" }
+      }
+    },
+    "safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["secret_redacted", "injection_scanned"],
+      "properties": {
+        "secret_redacted": { "type": "boolean" },
+        "injection_scanned": { "type": "boolean" }
+      }
+    }
+  }
+}

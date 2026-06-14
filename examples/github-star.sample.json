@@ -1,0 +1,41 @@
+{
+  "schema_version": "0.1.0",
+  "id": "kc_3f1c9a2b7d4e6f80",
+  "content_hash": "9b1c0e8a4d2f6b3a7c5e1d9f0a2b4c6d8e0f1a3b5c7d9e1f2a4b6c8d0e2f4a6b",
+  "source": {
+    "connector": "github_stars",
+    "url": "https://github.com/MemTensor/MemOS",
+    "captured_at": "2026-06-14T08:00:00Z",
+    "raw_ref": "MemTensor/MemOS"
+  },
+  "content": {
+    "title": "MemTensor/MemOS",
+    "body_md": "Self-evolving memory OS for LLM & AI Agents: ultra-persistent memory, hybrid-retrieval, and cross-task skill reuse, with 35.24% token savings\n\nlanguage: TypeScript | stars: 9852 | pushed_at: 2026-06-10T00:00:00Z",
+    "lang": "en",
+    "media": []
+  },
+  "enrichment": {
+    "summary": "Self-evolving memory OS for LLM & AI Agents: ultra-persistent memory, hybrid-retrieval, and cross-task skill reuse.",
+    "tags": ["lang:TypeScript", "memory", "rag", "agent"],
+    "category": "repo",
+    "topics": ["memory", "rag", "agent"],
+    "value_score": 0,
+    "value_level": "cold",
+    "evidence_level": "heuristic"
+  },
+  "linkage": {
+    "projects": ["KIS"],
+    "related_cards": [],
+    "wikilinks": []
+  },
+  "lifecycle": {
+    "state": "inbox",
+    "created_at": "2026-06-14T08:00:00Z",
+    "updated_at": "2026-06-14T08:00:00Z",
+    "version": 1
+  },
+  "safety": {
+    "secret_redacted": false,
+    "injection_scanned": false
+  }
+}

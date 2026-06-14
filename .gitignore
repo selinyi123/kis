@@ -1,0 +1,11 @@
+# KIS local artifacts
+data/
+*.db
+*.db-journal
+*.db-wal
+vault_out/
+__pycache__/
+*.pyc
+.venv/
+.env
+.toolchain/
