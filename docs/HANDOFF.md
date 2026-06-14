@@ -3,7 +3,10 @@
 > 本文件是 KIS 项目状态的唯一事实源（沿用 ClipVault 纪律）。每次切片完成后更新。
 
 ## 当前状态（2026-06-14）
-- **阶段**：v0.1 最小可运行闭环 **已交付**。
+- **阶段**：**v0.2a 已交付** — 第二数据源（浏览器书签）接入，KIS 正式成为多源系统。v0.1（GitHub Stars）闭环此前已交付。
+- **v0.2a 实测**：schema 演进到 **0.2.0**（新增 source_type / source_id / normalized_url / folder_path / authority / sensitivity）。`ingest_bookmarks.py` 实测导入 `bookmarks_2026_6_14.html`：parsed=42, inserted=39, **blocked=3**（免税地址/反检测浏览器/机场，写入 _blocked JSONL，未入库未入 Obsidian）, invalid=0。GitHub Stars 同步重建 38 卡。**20/20 pytest 全绿**（12 pipeline + 8 bookmarks）。
+- **KIS-007 验收**：8 条标准全部满足（导入成功 / 39≥30 有效卡 / 3 类敏感书签拦截 / 每卡含 source_url+source_id+content_hash+captured_at+sensitivity+authority+status / SQLite 可按 source_type=web_bookmark 查询 / Obsidian 按分类目录浏览 / 测试通过 / 本 HANDOFF 更新）。
+- **Obsidian**：`KIS 知识情报系统\Browser-Bookmarks\{AI-Workspace,Agent-Tools,Visual-Tools,Dev-Resources,Research,Trading-Research,Ops-Internal,General}` 共 39 卡已上传。
 - **底座决策**：新建独立 `kis` 仓库（用户拍板，2026-06-14）。
 - **GitHub**：已建私有仓库 **https://github.com/selinyi123/kis**（PRIVATE，默认分支 main），v0.1 已首推（16 文件，commit ff6e90f）。本地 main 跟踪 origin/main。git 身份 local 设为 selinyi123 / 邮箱。
 - **Obsidian**：已上传到库 `D:\TOOL\OBSIDIAN\Home\prompt仓库\KIS 知识情报系统\`（主页 + 报告 + 5 文档 + 37 张标星卡片）。

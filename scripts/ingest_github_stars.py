@@ -121,7 +121,7 @@ def main() -> int:
         status = store.upsert(card)
         stats[status] += 1
         if not args.no_obsidian:
-            export_card(card, args.obsidian_out)
+            export_card(card, args.obsidian_out, rel_dir="GitHub-Stars")
             stats["exported"] += 1
 
     store.close()

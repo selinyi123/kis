@@ -20,10 +20,16 @@
 - [ ] KIS-001 在 GitHub 建私有 `kis` repo 并首推（待用户授权 push）
 - [ ] KIS-003 BaseConnector 抽象类化（当前为脚本形态，已具雏形）
 
-### P1（v0.2 开工）
-- [ ] KIS-007 网页剪藏连接器（crawl4ai → Markdown）
-- [ ] KIS-008 剪切板源接入（对接 ClipVault outbox）
-- [ ] KIS-009 标签体系数据文件 `taxonomy.json` 驱动
+### v0.2a（已完成）
+- [x] KIS-007 浏览器书签连接器（Netscape HTML → KnowledgeCard，分类/敏感拦截/Obsidian 分目录）
+- [x] schema 演进 0.1.0 → 0.2.0（source_type / 来源溯源字段 / authority / sensitivity）
+- [x] 分类规则引擎 `classify.py`（blocked 拦截：成人/机场/免税地址/反检测）
+
+### P1（v0.2b 起）
+- [ ] KIS-008 单 URL 网页剪藏：`python scripts/ingest_url.py <url>`
+- [ ] KIS-009 Crawl4AI 可选增强（URL → 干净 markdown/json）
+- [ ] KIS-008b 剪切板源接入（对接 ClipVault outbox）
+- [ ] KIS-009b 标签体系数据文件 `taxonomy.json` 驱动
 - [ ] KIS-011 近似去重（simhash/embedding）
 - [ ] KIS-012 GitHub JSONL 私备
 

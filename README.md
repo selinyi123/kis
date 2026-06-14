@@ -4,12 +4,14 @@
 
 > 不是更大的收藏夹，而是一个**知识运行时引擎**：采集 → 清洗 → 去重 → 摘要 → 分类 → 打标 → 价值评分 → 主题聚类 → 项目关联 → 更新跟踪 → 同步归档。
 
-## 当前状态：v0.1 最小可运行闭环 ✅
+## 当前状态：v0.2a 多源闭环 ✅
 
-已跑通：**GitHub Stars → KnowledgeCard → SQLite(FTS5) → Obsidian Note**，幂等、可搜索、自动项目关联。
+已跑通两个源：**GitHub Stars + 浏览器书签 → KnowledgeCard → SQLite(FTS5) → Obsidian Note**，幂等、可搜索、自动分类、敏感书签拦截、自动项目关联。
 
 ```
-源连接器 ──▶ KnowledgeCard(v0.1 schema) ──▶ 校验 ──▶ SQLite + 事件日志 ──▶ Obsidian 笔记
+源连接器 ──▶ KnowledgeCard(v0.2.0 schema) ──▶ 校验 ──▶ SQLite + 事件日志 ──▶ Obsidian 笔记
+  GitHub Stars                                                          GitHub-Stars/
+  Browser Bookmarks ──▶ 分类(classify) ──▶ blocked? ─是─▶ _blocked JSONL  Browser-Bookmarks/<分类>/
 ```
 
 ## 快速开始
@@ -21,11 +23,14 @@ python -m unittest discover -s tests -v
 # 2) 采集你的 GitHub Stars（复用已登录的 gh CLI，无需配置 token）
 python scripts/ingest_github_stars.py
 
+# 3) 导入浏览器书签（Netscape HTML 导出）
+python scripts/ingest_bookmarks.py "C:\Users\<you>\Documents\bookmarks.html"
+
 # 仅入库不导出 Obsidian
 python scripts/ingest_github_stars.py --no-obsidian
 
 # 导出到真实 Obsidian 库
-python scripts/ingest_github_stars.py --obsidian-out "D:\TOOL\OBSIDIAN\Home\prompt仓库\KIS"
+python scripts/ingest_bookmarks.py bookmarks.html --obsidian-out "D:\TOOL\OBSIDIAN\Home\prompt仓库\KIS 知识情报系统"
 ```
 
 产物：`data/kis.db`（SQLite，含 cards / events / cards_fts）+ `vault_out/`（Obsidian 笔记，均 gitignored）。

@@ -1,8 +1,8 @@
 """SQLite + FTS5 store with idempotent upsert and an append-only event log.
 
-Design mirrors ClipVault (content_hash idempotency, event outbox as the source
-of truth) and DPMS (insert_if_new). Re-running ingest never duplicates a card:
-the deterministic ``id`` is the primary key; ``content_hash`` decides whether an
+Design mirrors ClipVault (content_hash idempotency, event outbox as source of
+truth) and DPMS (insert_if_new). Re-running ingest never duplicates a card: the
+deterministic ``id`` is the primary key; ``content_hash`` decides whether an
 existing card is "unchanged" or "updated".
 """
 
@@ -18,7 +18,7 @@ _SCHEMA_SQL = """
 CREATE TABLE IF NOT EXISTS cards (
     id            TEXT PRIMARY KEY,
     content_hash  TEXT NOT NULL,
-    connector     TEXT NOT NULL,
+    source_type   TEXT NOT NULL,
     url           TEXT NOT NULL,
     title         TEXT NOT NULL,
     body_md       TEXT NOT NULL,
@@ -29,6 +29,9 @@ CREATE TABLE IF NOT EXISTS cards (
     value_score   INTEGER,
     value_level   TEXT,
     evidence_level TEXT,
+    authority     TEXT,
+    sensitivity   TEXT,
+    folder_path   TEXT,
     state         TEXT,
     created_at    TEXT,
     updated_at    TEXT,
@@ -36,7 +39,8 @@ CREATE TABLE IF NOT EXISTS cards (
     card_json     TEXT NOT NULL
 );
 
-CREATE INDEX IF NOT EXISTS idx_cards_connector ON cards(connector);
+CREATE INDEX IF NOT EXISTS idx_cards_source_type ON cards(source_type);
+CREATE INDEX IF NOT EXISTS idx_cards_category ON cards(category);
 CREATE INDEX IF NOT EXISTS idx_cards_state ON cards(state);
 
 CREATE TABLE IF NOT EXISTS events (
@@ -68,7 +72,6 @@ class Store:
             self.conn.executescript(_FTS_SQL)
             self.fts_enabled = True
         except sqlite3.OperationalError:
-            # FTS5 not compiled into this sqlite build — search degrades to LIKE.
             self.fts_enabled = False
         self.conn.commit()
 
@@ -85,10 +88,10 @@ class Store:
         ).fetchone()
 
         if row is None:
-            status = "inserted"
-            version = 1
+            status, version = "inserted", 1
         elif row["content_hash"] == card["content_hash"]:
             self._log_event(cid, "unchanged", {"content_hash": card["content_hash"]})
+            self.conn.commit()
             return "unchanged"
         else:
             status = "updated"
@@ -96,32 +99,34 @@ class Store:
             card["lifecycle"]["version"] = version
             card["lifecycle"]["updated_at"] = now_iso()
 
-        enr = card["enrichment"]
-        life = card["lifecycle"]
+        enr, life, src, saf = card["enrichment"], card["lifecycle"], card["source"], card["safety"]
         self.conn.execute(
-            """INSERT INTO cards (id, content_hash, connector, url, title, body_md,
+            """INSERT INTO cards (id, content_hash, source_type, url, title, body_md,
                    summary, category, tags_json, projects_json, value_score,
-                   value_level, evidence_level, state, created_at, updated_at,
-                   version, card_json)
-               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                   value_level, evidence_level, authority, sensitivity, folder_path,
+                   state, created_at, updated_at, version, card_json)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                ON CONFLICT(id) DO UPDATE SET
-                   content_hash=excluded.content_hash,
-                   title=excluded.title, body_md=excluded.body_md,
-                   summary=excluded.summary, category=excluded.category,
-                   tags_json=excluded.tags_json, projects_json=excluded.projects_json,
-                   value_score=excluded.value_score, value_level=excluded.value_level,
-                   evidence_level=excluded.evidence_level, state=excluded.state,
+                   content_hash=excluded.content_hash, title=excluded.title,
+                   body_md=excluded.body_md, summary=excluded.summary,
+                   category=excluded.category, tags_json=excluded.tags_json,
+                   projects_json=excluded.projects_json, value_score=excluded.value_score,
+                   value_level=excluded.value_level, evidence_level=excluded.evidence_level,
+                   authority=excluded.authority, sensitivity=excluded.sensitivity,
+                   folder_path=excluded.folder_path, state=excluded.state,
                    updated_at=excluded.updated_at, version=excluded.version,
                    card_json=excluded.card_json""",
             (
-                cid, card["content_hash"], card["source"]["connector"], card["source"]["url"],
+                cid, card["content_hash"], src["source_type"], src["url"],
                 card["content"]["title"], card["content"]["body_md"],
                 enr.get("summary", ""), enr.get("category", ""),
                 json.dumps(enr.get("tags", []), ensure_ascii=False),
                 json.dumps(card["linkage"].get("projects", []), ensure_ascii=False),
                 enr.get("value_score", 0), enr.get("value_level", "cold"),
-                enr.get("evidence_level", "heuristic"), life.get("state", "inbox"),
-                life.get("created_at"), life.get("updated_at"), version,
+                enr.get("evidence_level", "source"), enr.get("authority", "source"),
+                saf.get("sensitivity", "public"), src.get("folder_path", ""),
+                life.get("state", "inbox"), life.get("created_at"),
+                life.get("updated_at"), version,
                 json.dumps(card, ensure_ascii=False),
             ),
         )
@@ -152,23 +157,28 @@ class Store:
 
     # -- read path ------------------------------------------------------------
 
-    def count(self) -> int:
+    def count(self, source_type: str | None = None) -> int:
+        if source_type:
+            return self.conn.execute(
+                "SELECT COUNT(*) AS n FROM cards WHERE source_type = ?", (source_type,)
+            ).fetchone()["n"]
         return self.conn.execute("SELECT COUNT(*) AS n FROM cards").fetchone()["n"]
 
     def get(self, card_id: str) -> dict[str, Any] | None:
         row = self.conn.execute("SELECT card_json FROM cards WHERE id = ?", (card_id,)).fetchone()
         return json.loads(row["card_json"]) if row else None
 
-    def all_cards(self) -> list[dict[str, Any]]:
-        rows = self.conn.execute("SELECT card_json FROM cards ORDER BY created_at").fetchall()
+    def by_source_type(self, source_type: str) -> list[dict[str, Any]]:
+        rows = self.conn.execute(
+            "SELECT card_json FROM cards WHERE source_type = ? ORDER BY created_at", (source_type,)
+        ).fetchall()
         return [json.loads(r["card_json"]) for r in rows]
 
     def search(self, query: str, limit: int = 20) -> list[dict[str, Any]]:
         if self.fts_enabled:
             rows = self.conn.execute(
                 """SELECT c.card_json FROM cards_fts f JOIN cards c ON c.id = f.id
-                   WHERE cards_fts MATCH ? LIMIT ?""",
-                (query, limit),
+                   WHERE cards_fts MATCH ? LIMIT ?""", (query, limit),
             ).fetchall()
         else:
             like = f"%{query}%"

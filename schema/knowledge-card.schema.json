@@ -1,24 +1,29 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://kis.local/schema/knowledge-card-0.1.0.json",
+  "$id": "https://kis.local/schema/knowledge-card-0.2.0.json",
   "title": "KnowledgeCard",
-  "description": "KIS unified knowledge asset. v0.1.0 frozen schema. Unknown fields are rejected (additionalProperties:false) per PPE contract discipline.",
+  "description": "KIS unified knowledge asset. v0.2.0 frozen schema. Unknown fields are rejected (additionalProperties:false) per PPE contract discipline. Adds source_type, provenance (source_id/normalized_url/folder_path/import_batch_id), authority, and sensitivity for multi-source ingest (KIS-007).",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "id", "content_hash", "source", "content", "enrichment", "linkage", "lifecycle", "safety"],
   "properties": {
-    "schema_version": { "type": "string", "enum": ["0.1.0"] },
-    "id": { "type": "string", "description": "Deterministic stable id kc_<16hex> = sha256(connector|url). Idempotent across re-runs." },
-    "content_hash": { "type": "string", "description": "sha256 hex of title+body; changes when source content changes (update tracking)." },
+    "schema_version": { "type": "string", "enum": ["0.2.0"] },
+    "id": { "type": "string", "description": "Deterministic stable id kc_<16hex> = sha256(source_type|normalized_url). Idempotent across re-runs." },
+    "content_hash": { "type": "string", "description": "sha256 hex of content fingerprint; changes when source content changes (update tracking)." },
     "source": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["connector", "url", "captured_at"],
+      "required": ["source_type", "url", "source_id", "captured_at"],
       "properties": {
-        "connector": { "type": "string", "enum": ["github_stars", "clipboard", "web", "twitter", "zhihu", "bilibili", "xhs", "local", "rss", "reddit", "youtube"] },
+        "source_type": { "type": "string", "enum": ["github_star", "web_bookmark", "web_clip", "clipboard", "project_event", "manual", "rss"] },
         "url": { "type": "string" },
+        "source_id": { "type": "string", "description": "url_hash — 16hex of normalized_url." },
         "captured_at": { "type": "string" },
-        "raw_ref": { "type": "string" }
+        "raw_ref": { "type": "string" },
+        "folder_path": { "type": "string" },
+        "raw_title": { "type": "string" },
+        "normalized_url": { "type": "string" },
+        "import_batch_id": { "type": "string" }
       }
     },
     "content": {
@@ -35,7 +40,7 @@
     "enrichment": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["evidence_level", "value_score", "value_level"],
+      "required": ["evidence_level", "value_score", "value_level", "authority"],
       "properties": {
         "summary": { "type": "string" },
         "tags": { "type": "array", "items": { "type": "string" } },
@@ -43,7 +48,8 @@
         "topics": { "type": "array", "items": { "type": "string" } },
         "value_score": { "type": "integer" },
         "value_level": { "type": "string", "enum": ["cold", "warming", "usable", "ready"] },
-        "evidence_level": { "type": "string", "enum": ["heuristic", "llm", "user_confirmed"] }
+        "evidence_level": { "type": "string", "enum": ["source", "heuristic", "llm", "user_confirmed"] },
+        "authority": { "type": "string", "enum": ["source", "derived"] }
       }
     },
     "linkage": {
@@ -71,10 +77,11 @@
     "safety": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["secret_redacted", "injection_scanned"],
+      "required": ["secret_redacted", "injection_scanned", "sensitivity"],
       "properties": {
         "secret_redacted": { "type": "boolean" },
-        "injection_scanned": { "type": "boolean" }
+        "injection_scanned": { "type": "boolean" },
+        "sensitivity": { "type": "string", "enum": ["public", "internal", "blocked"] }
       }
     }
   }
