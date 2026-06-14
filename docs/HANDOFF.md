@@ -3,7 +3,9 @@
 > 本文件是 KIS 项目状态的唯一事实源（沿用 ClipVault 纪律）。每次切片完成后更新。
 
 ## 当前状态（2026-06-14）
-- **阶段**：**v0.2a 已交付** — 第二数据源（浏览器书签）接入，KIS 正式成为多源系统。v0.1（GitHub Stars）闭环此前已交付。
+- **阶段**：**v0.2b 已交付** — 第三数据源（单 URL 网页剪藏）接入，含 SSRF 防线。三源齐备：GitHub Stars + Browser Bookmarks + Single Web URL。
+- **v0.2b 实测**：schema 演进 0.2.0→**0.2.1**（content 增 description/text_preview；source 增 site_name/http_status/fetched_at/fetch_error）。`ingest_url.py` 实测处理 5 类 URL（example/GitHub/HuggingFace/Python博客/Tripo3D）全部 inserted，分类正确（HF→ai_workspace, Tripo→visual_tools, MemOS→agent_tools）。SSRF 防线：file/ftp/javascript/data/about scheme + localhost + 私网/环回/链路本地 IP（含 169.254.169.254）全部拦截。**30/30 pytest 全绿**（含 10 个 web_url，零网络依赖、零 ResourceWarning）。修复 classify 短子串误判（"rom"误配"from" 等）。当前库：github_star 38 + web_bookmark 39 + web_clip 5 = 82 卡。
+- **阶段（历史）**：v0.2a 浏览器书签接入；v0.1 GitHub Stars 闭环。
 - **v0.2a 实测**：schema 演进到 **0.2.0**（新增 source_type / source_id / normalized_url / folder_path / authority / sensitivity）。`ingest_bookmarks.py` 实测导入 `bookmarks_2026_6_14.html`：parsed=42, inserted=39, **blocked=3**（免税地址/反检测浏览器/机场，写入 _blocked JSONL，未入库未入 Obsidian）, invalid=0。GitHub Stars 同步重建 38 卡。**20/20 pytest 全绿**（12 pipeline + 8 bookmarks）。
 - **KIS-007 验收**：8 条标准全部满足（导入成功 / 39≥30 有效卡 / 3 类敏感书签拦截 / 每卡含 source_url+source_id+content_hash+captured_at+sensitivity+authority+status / SQLite 可按 source_type=web_bookmark 查询 / Obsidian 按分类目录浏览 / 测试通过 / 本 HANDOFF 更新）。
 - **Obsidian**：`KIS 知识情报系统\Browser-Bookmarks\{AI-Workspace,Agent-Tools,Visual-Tools,Dev-Resources,Research,Trading-Research,Ops-Internal,General}` 共 39 卡已上传。

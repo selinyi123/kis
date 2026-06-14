@@ -1,13 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://kis.local/schema/knowledge-card-0.2.0.json",
+  "$id": "https://kis.local/schema/knowledge-card-0.2.1.json",
   "title": "KnowledgeCard",
-  "description": "KIS unified knowledge asset. v0.2.0 frozen schema. Unknown fields are rejected (additionalProperties:false) per PPE contract discipline. Adds source_type, provenance (source_id/normalized_url/folder_path/import_batch_id), authority, and sensitivity for multi-source ingest (KIS-007).",
+  "description": "KIS unified knowledge asset. v0.2.1 frozen schema. Unknown fields are rejected (additionalProperties:false) per PPE contract discipline. 0.2.0 added source_type + provenance + authority + sensitivity (KIS-007 bookmarks); 0.2.1 adds web-clip fetch fields content.description/text_preview and source.site_name/http_status/fetched_at/fetch_error (KIS-008 single URL).",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "id", "content_hash", "source", "content", "enrichment", "linkage", "lifecycle", "safety"],
   "properties": {
-    "schema_version": { "type": "string", "enum": ["0.2.0"] },
+    "schema_version": { "type": "string", "enum": ["0.2.1"] },
     "id": { "type": "string", "description": "Deterministic stable id kc_<16hex> = sha256(source_type|normalized_url). Idempotent across re-runs." },
     "content_hash": { "type": "string", "description": "sha256 hex of content fingerprint; changes when source content changes (update tracking)." },
     "source": {
@@ -23,7 +23,11 @@
         "folder_path": { "type": "string" },
         "raw_title": { "type": "string" },
         "normalized_url": { "type": "string" },
-        "import_batch_id": { "type": "string" }
+        "import_batch_id": { "type": "string" },
+        "site_name": { "type": "string" },
+        "http_status": { "type": "integer" },
+        "fetched_at": { "type": "string" },
+        "fetch_error": { "type": "string" }
       }
     },
     "content": {
@@ -34,6 +38,8 @@
         "title": { "type": "string" },
         "body_md": { "type": "string" },
         "lang": { "type": "string" },
+        "description": { "type": "string" },
+        "text_preview": { "type": "string" },
         "media": { "type": "array", "items": { "type": "object" } }
       }
     },

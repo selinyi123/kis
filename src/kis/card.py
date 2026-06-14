@@ -100,6 +100,12 @@ def new_card(
     evidence_level: str = "source",
     authority: str = "source",
     sensitivity: str = "public",
+    description: str | None = None,
+    text_preview: str | None = None,
+    site_name: str | None = None,
+    http_status: int | None = None,
+    fetched_at: str | None = None,
+    fetch_error: str | None = None,
     projects: list[str] | None = None,
     wikilinks: list[str] | None = None,
 ) -> dict[str, Any]:
@@ -164,6 +170,18 @@ def new_card(
         src["raw_title"] = raw_title
     if import_batch_id is not None:
         src["import_batch_id"] = import_batch_id
+    if site_name is not None:
+        src["site_name"] = site_name
+    if http_status is not None:
+        src["http_status"] = http_status
+    if fetched_at is not None:
+        src["fetched_at"] = fetched_at
+    if fetch_error is not None:
+        src["fetch_error"] = fetch_error
+    if description is not None:
+        card["content"]["description"] = description
+    if text_preview is not None:
+        card["content"]["text_preview"] = text_preview
     return card
 
 

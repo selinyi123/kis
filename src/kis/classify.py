@@ -30,26 +30,28 @@ _RULES: list[tuple[str, str, str, str, tuple[str, ...]]] = [
     ("trading_research", "isolate", "internal", "Trading-Research", (
         "quant", "polymarket", "trading", "量化", "交易", "easyquant", "预测市场",
     )),
+    # NOTE: keywords are substring-matched, so short generic tokens like bare
+    # "ip"/"rom"/"hive"/"paper" are avoided — they false-match from/archive/
+    # wallpaper. Prefer specific multi-char tokens.
     ("ops_tools", "ingest", "internal", "Ops-Internal", (
-        "vpn", "webvpn", "rom", "刷机", "路由", "router", "软路由",
-        "ip查询", "ip 查询", "ip分流", "koolcenter", "net.coffee", "网络",
+        "vpn", "webvpn", "刷机", "刷机包", "rom乐园", "rom下载", "romleyuan",
+        "路由", "软路由", "router", "ip查询", "ip 查询", "ip分流", "koolcenter", "net.coffee",
     )),
     ("ai_workspace", "ingest", "public", "AI-Workspace", (
         "chatgpt", "openai", "gemini", "ai studio", "aistudio", "hugging face",
         "huggingface", "claude", "z.ai", "zhipu", "智谱", "kimi", "通义", "文心",
     )),
     ("agent_tools", "ingest", "public", "Agent-Tools", (
-        "agent", "perplexity", "hive", "loops", "skillhub", "accio", "manus", "dify",
+        "agent", "perplexity", "skillhub", "accio", "dify", "hivehq", "蜂巢",
     )),
     ("visual_tools", "ingest", "public", "Visual-Tools", (
-        "image", "3d", "style", "vibe", "tripo", "hyper3d", "rodin", "midjourney",
-        "绘画", "gallery", "gpt-image",
+        "image", "3d", "tripo", "hyper3d", "rodin", "midjourney", "绘画", "gallery", "gpt-image",
     )),
     ("dev_resources", "ingest", "public", "Dev-Resources", (
-        "github", "博客园", "scriptcat", "deepl", "gitee", "stackoverflow", "掘金", "csdn", "npm",
+        "github", "博客园", "scriptcat", "deepl", "gitee", "stackoverflow", "掘金", "csdn",
     )),
     ("research", "ingest", "public", "Research", (
-        "oalib", "open access", "论文", "paper", "arxiv", "scholar", "搜索", "资料", "metaso", "秘塔",
+        "oalib", "open access", "论文", "arxiv", "scholar", "搜索", "资料", "metaso", "秘塔",
     )),
 ]
 

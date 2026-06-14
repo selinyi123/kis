@@ -30,12 +30,13 @@ def _yaml_list(items: list[str]) -> str:
 def _frontmatter(card: dict[str, Any]) -> list[str]:
     src, enr, life, saf = card["source"], card["enrichment"], card["lifecycle"], card["safety"]
     projects = card["linkage"].get("projects", [])
-    return [
+    lines = [
         "---",
         f"card_id: {card['id']}",
         f"source_type: {src['source_type']}",
         f"source_url: {_q(src['url'])}",
         f"source_id: {src['source_id']}",
+        f"normalized_url: {_q(src.get('normalized_url', ''))}",
         f"project: {projects[0] if projects else 'general'}",
         f"category: {enr.get('category', '')}",
         f"folder_path: {_q(src.get('folder_path', ''))}",
@@ -46,11 +47,17 @@ def _frontmatter(card: dict[str, Any]) -> list[str]:
         f"status: {life.get('state', 'inbox')}",
         f"evidence_level: {enr.get('evidence_level', 'source')}",
         f"value_level: {enr.get('value_level', 'cold')}",
+    ]
+    if src.get("site_name"):
+        lines.append(f"site_name: {_q(src['site_name'])}")
+    lines.append(f"lang: {card['content'].get('lang', 'unknown')}")
+    lines += [
         f"tags: {_yaml_list(enr.get('tags', []))}",
         f"projects: {_yaml_list(projects)}",
         "---",
         "",
     ]
+    return lines
 
 
 def render_card_md(card: dict[str, Any]) -> str:
@@ -70,6 +77,17 @@ def render_card_md(card: dict[str, Any]) -> str:
 def render_bookmark_md(card: dict[str, Any]) -> str:
     """Bookmark template (KIS-007 spec). Body already holds the Source/Notes
     sections; frontmatter carries provenance."""
+    link = card["linkage"]
+    out = _frontmatter(card)
+    out += [f"# {card['content']['title']}", "", card["content"]["body_md"], ""]
+    proj_links = [f"[[{p}]]" for p in link.get("projects", [])]
+    if proj_links:
+        out += ["", "**关联项目**: " + " ".join(proj_links), ""]
+    return "\n".join(out)
+
+
+def render_webclip_md(card: dict[str, Any]) -> str:
+    """Web clip template (KIS-008). Body holds Source/Description/Text Preview."""
     link = card["linkage"]
     out = _frontmatter(card)
     out += [f"# {card['content']['title']}", "", card["content"]["body_md"], ""]
