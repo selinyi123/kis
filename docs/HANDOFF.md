@@ -4,7 +4,9 @@
 
 ## 当前状态（2026-06-14）
 - **阶段**：v0.1 最小可运行闭环 **已交付**。
-- **底座决策**：新建独立 `kis` 仓库（用户拍板，2026-06-14）。当前为本地工程，尚未在 GitHub 建 repo / 首推（待授权）。
+- **底座决策**：新建独立 `kis` 仓库（用户拍板，2026-06-14）。
+- **GitHub**：已建私有仓库 **https://github.com/selinyi123/kis**（PRIVATE，默认分支 main），v0.1 已首推（16 文件，commit ff6e90f）。本地 main 跟踪 origin/main。git 身份 local 设为 selinyi123 / 邮箱。
+- **Obsidian**：已上传到库 `D:\TOOL\OBSIDIAN\Home\prompt仓库\KIS 知识情报系统\`（主页 + 报告 + 5 文档 + 37 张标星卡片）。
 - **v0.1 范围决策**：三源闭环架构，但 v0.1 先交付 GitHub Stars 单源贯通链路（用户拍板）。
 
 ## 已验证事实
@@ -26,9 +28,10 @@
 - gh 路径：脚本自动探测 PATH 或 `C:\Program Files\GitHub CLI\gh.exe`。
 
 ## 下一步（待用户指令）
-1. 授权后：在 GitHub 建私有 `kis` repo 并 `git init` + 首推。
+1. ~~建私有 `kis` repo 并首推~~ ✅ 已完成（2026-06-14）。
 2. v0.2 开工：KIS-007 网页连接器 / KIS-008 剪切板源 / KIS-009 标签体系 / KIS-013 价值评分。
 3. 把 `ingest_github_stars.py` 抽象为 `BaseConnector` 子类（KIS-003）。
+4. 用 LLM 真正加工 37 张标星卡片的 summary/value_level（当前确定性占位 cold/heuristic）。
 
 ## 角色纪律
 Architect（Claude）写切片规格并裁决验收；用户最终拍板。每切片：实现 → 纯函数单测 → 更新本 HANDOFF → （授权后）push → Obsidian 同步。
