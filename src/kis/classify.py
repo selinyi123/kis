@@ -58,6 +58,19 @@ _RULES: list[tuple[str, str, str, str, tuple[str, ...]]] = [
 _FALLBACK = ("general", "ingest", "public", "General")
 
 
+_CATEGORY_FOLDER = {
+    "ai_workspace": "AI-Workspace", "agent_tools": "Agent-Tools",
+    "visual_tools": "Visual-Tools", "dev_resources": "Dev-Resources",
+    "research": "Research", "trading_research": "Trading-Research",
+    "ops_tools": "Ops-Internal", "general": "General",
+}
+
+
+def folder_for_category(category: str) -> str:
+    """Map a classification category to its Obsidian sub-folder name."""
+    return _CATEGORY_FOLDER.get(category, "General")
+
+
 def classify_bookmark(title: str, url: str, folder_path: str = "") -> dict[str, str]:
     """Return {category, decision, sensitivity, folder} for a bookmark."""
     haystack = f"{title} {url} {folder_path}".lower()

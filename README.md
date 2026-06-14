@@ -4,16 +4,25 @@
 
 > 不是更大的收藏夹，而是一个**知识运行时引擎**：采集 → 清洗 → 去重 → 摘要 → 分类 → 打标 → 价值评分 → 主题聚类 → 项目关联 → 更新跟踪 → 同步归档。
 
-## 当前状态：v0.2c 三源 + 可选提取后端 ✅
+## 当前状态：v0.3.0 三源 + AI 派生加工层 ✅
 
-三个源：**GitHub Stars + 浏览器书签 + 单 URL 网页剪藏 → KnowledgeCard → SQLite(FTS5) → Obsidian Note**，幂等、可搜索、自动分类、敏感项拦截、SSRF 防线、自动项目关联。单 URL 剪藏支持可插拔提取后端（**stdlib 基线默认，Crawl4AI 可选增强**）。
+三个源：**GitHub Stars + 浏览器书签 + 单 URL 网页剪藏 → KnowledgeCard → SQLite(FTS5) → Obsidian**，叠加 **AI 派生加工层**（摘要 / 价值评分 / 项目相关度 / next_action）。派生层只读源、不当事实源、可复现可审计可回滚。
 
 ```
-源连接器 ──▶ KnowledgeCard(v0.2.2 schema) ──▶ 校验 ──▶ SQLite + 事件日志 ──▶ Obsidian 笔记
-  GitHub Stars                                                          GitHub-Stars/
-  Browser Bookmarks ──▶ 分类 ──▶ blocked? ─是─▶ _blocked JSONL          Browser-Bookmarks/<分类>/
-  Single Web URL ──▶ SSRF 校验 ──▶ 提取(stdlib|crawl4ai|auto) ──▶ 分类    Web-Clips/<分类>/
+采集: GitHub Stars / Browser Bookmarks / Single Web URL ──▶ KnowledgeCard(v0.3.0)
+        ──▶ 分类 / SSRF / blocked 拦截 ──▶ SQLite + 事件日志 ──▶ Obsidian
+加工: enrich_cards.py ──▶ derived{summary, value_score, value_level, project_relevance,
+        next_action, review_flags, generator(可复现溯源)}   # 只写 derived，永不改 source
 ```
+
+加工：
+```powershell
+python scripts/enrich_cards.py --mode heuristic                      # 确定性基线（离线）
+python scripts/enrich_cards.py --mode auto --provider mock           # 优先 LLM，失败降级
+python scripts/enrich_cards.py --mode llm --provider openai --limit 10
+python scripts/enrich_cards.py --mode heuristic --dry-run            # 不落库预览
+```
+派生层安全边界见 [docs/KIS-013_PROMPT_INJECTION_BOUNDARY.md](docs/KIS-013_PROMPT_INJECTION_BOUNDARY.md)。
 
 ## 快速开始
 

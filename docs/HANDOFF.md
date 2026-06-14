@@ -3,7 +3,10 @@
 > 本文件是 KIS 项目状态的唯一事实源（沿用 ClipVault 纪律）。每次切片完成后更新。
 
 ## 当前状态（2026-06-14）
-- **阶段**：**v0.2c 已交付** — 单 URL 剪藏新增可选提取后端（Crawl4AI），stdlib 仍为默认基线。
+- **阶段**：**v0.3.0 已交付** — AI 派生加工层（KIS-013）：摘要 + 价值评分 + 项目相关度 + next_action，确定性 heuristic 基线 + 可选 LLM provider。
+- **v0.3.0 实测**：schema 0.2.2→**0.3.0**（新增可选 `derived` 层，含 generator 溯源 input_hash/prompt_hash/output_hash/model/generated_at）。新增 `src/kis/enrich/`（scoring/summary/project_relevance/prompt_contract/heuristic + providers/{base,mock,openai}）+ `scripts/enrich_cards.py` + `docs/KIS-013_PROMPT_INJECTION_BOUNDARY.md`。**铁律：derived 永不改 source/provenance（assert_only_derived 逐字段锁定）；blocked 不加工；heuristic 全离线；LLM 可选；LLM 不是事实源**。实测对 82 卡跑 heuristic：processed=82 updated=82 errors=0；value_level{hot37/warm28/cold14/critical3}；next_action{integrate34/archive26/test9/read5/ignore7/monitor1}。idempotent（重跑 skipped_done=82）。auto+mock 实测产 llm_generated。**61/61 pytest 全绿**（+18：heuristic9/schema3/provider4/cli2；零网络、零 LLM、零 ResourceWarning）。
+- 注：blocked 卡片从不进 store（仅 _blocked JSONL），故 enrichment 的 skipped_blocked=0 是预期（无 blocked 卡可跳）。
+- **阶段（历史）**：v0.2c Crawl4AI 可选后端；v0.2b 单 URL+SSRF；v0.2a 书签；v0.1 Stars。
 - **v0.2c 实测**：schema 0.2.1→**0.2.2**（source.extraction_engine/extraction_status/extraction_error；content.clean_markdown/structured_data）。新增 `src/kis/extractors/`（base/stdlib_html/crawl4ai_adapter）。`ingest_url.py --extractor stdlib|crawl4ai|auto`（默认 stdlib）。实测：stdlib→success；auto（crawl4ai 未装）→**fallback** 降级 stdlib；crawl4ai 强制→**failed 明确报错不伪装**。Crawl4AI 延迟导入、非硬依赖（`crawl4ai installed: False` 下全流程正常）。**43/43 pytest 全绿**（+13：4 extractors + 9 crawl4ai adapter；零网络、零浏览器、零 ResourceWarning）。库仍 38+39+5=82 卡。
 - **阶段（历史）**：v0.2b 单 URL 剪藏 + SSRF 防线；v0.2a 浏览器书签；v0.1 GitHub Stars。
 - **v0.2b 实测**：schema 演进 0.2.0→**0.2.1**（content 增 description/text_preview；source 增 site_name/http_status/fetched_at/fetch_error）。`ingest_url.py` 实测处理 5 类 URL（example/GitHub/HuggingFace/Python博客/Tripo3D）全部 inserted，分类正确（HF→ai_workspace, Tripo→visual_tools, MemOS→agent_tools）。SSRF 防线：file/ftp/javascript/data/about scheme + localhost + 私网/环回/链路本地 IP（含 169.254.169.254）全部拦截。**30/30 pytest 全绿**（含 10 个 web_url，零网络依赖、零 ResourceWarning）。修复 classify 短子串误判（"rom"误配"from" 等）。当前库：github_star 38 + web_bookmark 39 + web_clip 5 = 82 卡。

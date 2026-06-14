@@ -39,10 +39,22 @@
 - [ ] KIS-011 近似去重（simhash/embedding）
 - [ ] KIS-012 GitHub JSONL 私备
 
-### P2（v0.3，多源材料齐备后）
-- [ ] KIS-013 LLM 摘要 / 价值评分（输入：38 stars + 39 bookmarks + web clips + crawl4ai 增强剪藏）
-- [ ] GBrain 只读试点（派生记忆层，关键结论回链来源）
+### v0.3.0（已完成）
+- [x] KIS-013 AI 派生加工层：摘要 + 价值评分(0-1) + value_level + project_relevance + next_action + review_flags
+  * 013a 确定性 heuristic 基线（offline）；013b 可选 LLM provider（mock/openai，延迟导入）
+  * schema 0.3.0 加 `derived`；prompt 注入边界文档；derived 永不改 source（assert_only_derived）
+  * `enrich_cards.py --mode heuristic|llm|auto --provider --limit --dry-run --force --source-type --category`
+
+### 下一阶段（用户定）
+- [ ] **KIS-014 Review Queue / 人工确认队列**：inbox → reviewed → canonical → archived（LLM 判断须人工确认才入 canonical）
+- [ ] KIS-015 GBrain 只读试点
+- [ ] KIS-016 Memory Benchmark
 - [ ] MemOS 隔离实验
+
+### 其它待办
+- [ ] KIS-008b 剪切板源（对接 ClipVault outbox）
+- [ ] KIS-011 近似去重（simhash/embedding）
+- [ ] KIS-012 GitHub JSONL 私备
 
 ### P2
 - [ ] KIS-013 价值评分 v1（DPMS scoring 改造）

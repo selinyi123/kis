@@ -1,13 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://kis.local/schema/knowledge-card-0.2.2.json",
+  "$id": "https://kis.local/schema/knowledge-card-0.3.0.json",
   "title": "KnowledgeCard",
-  "description": "KIS unified knowledge asset. v0.2.2 frozen schema. Unknown fields are rejected (additionalProperties:false) per PPE contract discipline. 0.2.0 added source_type + provenance + authority + sensitivity (KIS-007); 0.2.1 added web-clip fetch fields (KIS-008); 0.2.2 adds extraction provenance source.extraction_engine/extraction_status/extraction_error and content.clean_markdown/structured_data (KIS-009 optional Crawl4AI backend).",
+  "description": "KIS unified knowledge asset. v0.3.0 frozen schema. Unknown fields are rejected (additionalProperties:false) per PPE contract discipline. 0.2.x added multi-source ingest + provenance + extraction. 0.3.0 adds the optional `derived` AI-enrichment layer (KIS-013): summary/value scoring/project relevance/next action. derived is a DERIVED layer — it never mutates source/content/enrichment and is never treated as fact (evidence stays in generator metadata).",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "id", "content_hash", "source", "content", "enrichment", "linkage", "lifecycle", "safety"],
   "properties": {
-    "schema_version": { "type": "string", "enum": ["0.2.2"] },
+    "schema_version": { "type": "string", "enum": ["0.3.0"] },
     "id": { "type": "string", "description": "Deterministic stable id kc_<16hex> = sha256(source_type|normalized_url). Idempotent across re-runs." },
     "content_hash": { "type": "string", "description": "sha256 hex of content fingerprint; changes when source content changes (update tracking)." },
     "source": {
@@ -93,6 +93,49 @@
         "secret_redacted": { "type": "boolean" },
         "injection_scanned": { "type": "boolean" },
         "sensitivity": { "type": "string", "enum": ["public", "internal", "blocked"] }
+      }
+    },
+    "derived": {
+      "type": "object",
+      "description": "Optional AI-enrichment layer (KIS-013). Never present until enrichment runs; never mutates source/content/enrichment.",
+      "additionalProperties": false,
+      "required": ["value_score", "value_level", "reason_tags", "project_relevance", "next_action", "review_flags", "processing_status", "generator"],
+      "properties": {
+        "ai_summary": { "type": "string" },
+        "value_score": { "type": "number" },
+        "value_level": { "type": "string", "enum": ["cold", "warm", "hot", "critical"] },
+        "reason_tags": { "type": "array", "items": { "type": "string" } },
+        "project_relevance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["clipvault", "kis", "dpms", "prompt_engine", "visual_prompt_library", "trading_research"],
+          "properties": {
+            "clipvault": { "type": "number" },
+            "kis": { "type": "number" },
+            "dpms": { "type": "number" },
+            "prompt_engine": { "type": "number" },
+            "visual_prompt_library": { "type": "number" },
+            "trading_research": { "type": "number" }
+          }
+        },
+        "next_action": { "type": "string", "enum": ["ignore", "archive", "read", "test", "integrate", "monitor"] },
+        "review_flags": { "type": "array", "items": { "type": "string" } },
+        "processing_status": { "type": "string", "enum": ["pending", "heuristic", "llm_generated", "failed"] },
+        "generated_at": { "type": "string" },
+        "generator": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "input_hash"],
+          "properties": {
+            "mode": { "type": "string", "enum": ["heuristic", "llm", "auto"] },
+            "provider": { "type": "string" },
+            "model": { "type": "string" },
+            "prompt_hash": { "type": "string" },
+            "input_hash": { "type": "string" },
+            "output_hash": { "type": "string" },
+            "error": { "type": "string" }
+          }
+        }
       }
     }
   }

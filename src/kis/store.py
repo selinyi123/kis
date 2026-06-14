@@ -174,6 +174,29 @@ class Store:
         ).fetchall()
         return [json.loads(r["card_json"]) for r in rows]
 
+    def all_cards(self) -> list[dict[str, Any]]:
+        rows = self.conn.execute("SELECT card_json FROM cards ORDER BY source_type, created_at").fetchall()
+        return [json.loads(r["card_json"]) for r in rows]
+
+    def save_enrichment(self, card: dict[str, Any]) -> None:
+        """Persist the derived layer WITHOUT the content_hash idempotency gate.
+
+        Source upsert is idempotent on content_hash (dedup); derived enrichment
+        is a separate update path that intentionally rewrites card_json only.
+        """
+        self.conn.execute(
+            "UPDATE cards SET card_json = ? WHERE id = ?",
+            (json.dumps(card, ensure_ascii=False), card["id"]),
+        )
+        derived = card.get("derived", {})
+        self._log_event(card["id"], "enriched", {
+            "processing_status": derived.get("processing_status"),
+            "value_level": derived.get("value_level"),
+            "next_action": derived.get("next_action"),
+            "mode": derived.get("generator", {}).get("mode"),
+        })
+        self.conn.commit()
+
     def search(self, query: str, limit: int = 20) -> list[dict[str, Any]]:
         if self.fts_enabled:
             rows = self.conn.execute(

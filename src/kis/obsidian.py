@@ -55,6 +55,14 @@ def _frontmatter(card: dict[str, Any]) -> list[str]:
         lines.append(f"extraction_engine: {src['extraction_engine']}")
     if src.get("extraction_status"):
         lines.append(f"extraction_status: {src['extraction_status']}")
+    derived = card.get("derived")
+    if derived:
+        lines += [
+            f"value_score: {derived.get('value_score')}",
+            f"derived_value_level: {derived.get('value_level')}",
+            f"next_action: {derived.get('next_action')}",
+            f"processing_status: {derived.get('processing_status')}",
+        ]
     lines += [
         f"tags: {_yaml_list(enr.get('tags', []))}",
         f"projects: {_yaml_list(projects)}",
@@ -62,6 +70,45 @@ def _frontmatter(card: dict[str, Any]) -> list[str]:
         "",
     ]
     return lines
+
+
+_PROJECT_LABELS = [
+    ("kis", "KIS"), ("clipvault", "ClipVault"), ("dpms", "DPMS"),
+    ("prompt_engine", "Prompt Engine"), ("visual_prompt_library", "Visual Prompt Library"),
+    ("trading_research", "Trading Research"),
+]
+
+
+def _derived_section(card: dict[str, Any]) -> list[str]:
+    """Render the Derived Intelligence block. Never overwrites Source/Extraction —
+    it is appended after the source-derived body."""
+    d = card.get("derived")
+    if not d:
+        return []
+    gen = d.get("generator", {})
+    gen_str = f"{gen.get('mode')}" + (f"/{gen.get('provider')}" if gen.get("provider") else "")
+    rel = d.get("project_relevance", {})
+    out = [
+        "", "---", "",
+        "## Derived Intelligence",
+        f"- Value Score: {d.get('value_score')}",
+        f"- Value Level: {d.get('value_level')}",
+        f"- Next Action: {d.get('next_action')}",
+        f"- Reason Tags: {', '.join(d.get('reason_tags', [])) or '(none)'}",
+        f"- Processing: {d.get('processing_status')}",
+        f"- Generator: {gen_str} (input_hash={gen.get('input_hash', '')[:12]})",
+        "",
+        "## Summary",
+        d.get("ai_summary") or "(none)",
+        "",
+        "## Project Relevance",
+        "| Project | Score |", "|---|---:|",
+    ]
+    out += [f"| {label} | {rel.get(key, 0)} |" for key, label in _PROJECT_LABELS]
+    out += ["", "## Review Flags"]
+    out += [f"- {f}" for f in d.get("review_flags", [])] or ["- (none)"]
+    out.append("")
+    return out
 
 
 def render_card_md(card: dict[str, Any]) -> str:
@@ -75,6 +122,7 @@ def render_card_md(card: dict[str, Any]) -> str:
     proj_links = [f"[[{p}]]" for p in link.get("projects", [])]
     if proj_links:
         out += ["**关联项目**: " + " ".join(proj_links), ""]
+    out += _derived_section(card)
     return "\n".join(out)
 
 
@@ -87,6 +135,7 @@ def render_bookmark_md(card: dict[str, Any]) -> str:
     proj_links = [f"[[{p}]]" for p in link.get("projects", [])]
     if proj_links:
         out += ["", "**关联项目**: " + " ".join(proj_links), ""]
+    out += _derived_section(card)
     return "\n".join(out)
 
 
@@ -98,6 +147,7 @@ def render_webclip_md(card: dict[str, Any]) -> str:
     proj_links = [f"[[{p}]]" for p in link.get("projects", [])]
     if proj_links:
         out += ["", "**关联项目**: " + " ".join(proj_links), ""]
+    out += _derived_section(card)
     return "\n".join(out)
 
 
