@@ -51,6 +51,10 @@ def _frontmatter(card: dict[str, Any]) -> list[str]:
     if src.get("site_name"):
         lines.append(f"site_name: {_q(src['site_name'])}")
     lines.append(f"lang: {card['content'].get('lang', 'unknown')}")
+    if src.get("extraction_engine"):
+        lines.append(f"extraction_engine: {src['extraction_engine']}")
+    if src.get("extraction_status"):
+        lines.append(f"extraction_status: {src['extraction_status']}")
     lines += [
         f"tags: {_yaml_list(enr.get('tags', []))}",
         f"projects: {_yaml_list(projects)}",

@@ -106,6 +106,11 @@ def new_card(
     http_status: int | None = None,
     fetched_at: str | None = None,
     fetch_error: str | None = None,
+    extraction_engine: str | None = None,
+    extraction_status: str | None = None,
+    extraction_error: str | None = None,
+    clean_markdown: str | None = None,
+    structured_data: dict[str, Any] | None = None,
     projects: list[str] | None = None,
     wikilinks: list[str] | None = None,
 ) -> dict[str, Any]:
@@ -178,10 +183,20 @@ def new_card(
         src["fetched_at"] = fetched_at
     if fetch_error is not None:
         src["fetch_error"] = fetch_error
+    if extraction_engine is not None:
+        src["extraction_engine"] = extraction_engine
+    if extraction_status is not None:
+        src["extraction_status"] = extraction_status
+    if extraction_error is not None:
+        src["extraction_error"] = extraction_error
     if description is not None:
         card["content"]["description"] = description
     if text_preview is not None:
         card["content"]["text_preview"] = text_preview
+    if clean_markdown is not None:
+        card["content"]["clean_markdown"] = clean_markdown
+    if structured_data is not None:
+        card["content"]["structured_data"] = structured_data
     return card
 
 

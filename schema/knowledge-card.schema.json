@@ -1,13 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://kis.local/schema/knowledge-card-0.2.1.json",
+  "$id": "https://kis.local/schema/knowledge-card-0.2.2.json",
   "title": "KnowledgeCard",
-  "description": "KIS unified knowledge asset. v0.2.1 frozen schema. Unknown fields are rejected (additionalProperties:false) per PPE contract discipline. 0.2.0 added source_type + provenance + authority + sensitivity (KIS-007 bookmarks); 0.2.1 adds web-clip fetch fields content.description/text_preview and source.site_name/http_status/fetched_at/fetch_error (KIS-008 single URL).",
+  "description": "KIS unified knowledge asset. v0.2.2 frozen schema. Unknown fields are rejected (additionalProperties:false) per PPE contract discipline. 0.2.0 added source_type + provenance + authority + sensitivity (KIS-007); 0.2.1 added web-clip fetch fields (KIS-008); 0.2.2 adds extraction provenance source.extraction_engine/extraction_status/extraction_error and content.clean_markdown/structured_data (KIS-009 optional Crawl4AI backend).",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "id", "content_hash", "source", "content", "enrichment", "linkage", "lifecycle", "safety"],
   "properties": {
-    "schema_version": { "type": "string", "enum": ["0.2.1"] },
+    "schema_version": { "type": "string", "enum": ["0.2.2"] },
     "id": { "type": "string", "description": "Deterministic stable id kc_<16hex> = sha256(source_type|normalized_url). Idempotent across re-runs." },
     "content_hash": { "type": "string", "description": "sha256 hex of content fingerprint; changes when source content changes (update tracking)." },
     "source": {
@@ -27,7 +27,10 @@
         "site_name": { "type": "string" },
         "http_status": { "type": "integer" },
         "fetched_at": { "type": "string" },
-        "fetch_error": { "type": "string" }
+        "fetch_error": { "type": "string" },
+        "extraction_engine": { "type": "string", "enum": ["stdlib", "crawl4ai"] },
+        "extraction_status": { "type": "string", "enum": ["success", "fallback", "failed"] },
+        "extraction_error": { "type": "string" }
       }
     },
     "content": {
@@ -40,6 +43,8 @@
         "lang": { "type": "string" },
         "description": { "type": "string" },
         "text_preview": { "type": "string" },
+        "clean_markdown": { "type": "string" },
+        "structured_data": { "type": "object" },
         "media": { "type": "array", "items": { "type": "object" } }
       }
     },

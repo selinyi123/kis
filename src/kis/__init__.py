@@ -12,6 +12,6 @@ v0.3. Source-imported cards carry authority="source" and evidence_level="source"
 — they are raw provenance, never derived claims.
 """
 
-SCHEMA_VERSION = "0.2.1"
+SCHEMA_VERSION = "0.2.2"
 
 __all__ = ["SCHEMA_VERSION"]

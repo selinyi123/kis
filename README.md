@@ -4,15 +4,15 @@
 
 > 不是更大的收藏夹，而是一个**知识运行时引擎**：采集 → 清洗 → 去重 → 摘要 → 分类 → 打标 → 价值评分 → 主题聚类 → 项目关联 → 更新跟踪 → 同步归档。
 
-## 当前状态：v0.2b 三源闭环 ✅
+## 当前状态：v0.2c 三源 + 可选提取后端 ✅
 
-已跑通三个源：**GitHub Stars + 浏览器书签 + 单 URL 网页剪藏 → KnowledgeCard → SQLite(FTS5) → Obsidian Note**，幂等、可搜索、自动分类、敏感项拦截、SSRF 防线、自动项目关联。
+三个源：**GitHub Stars + 浏览器书签 + 单 URL 网页剪藏 → KnowledgeCard → SQLite(FTS5) → Obsidian Note**，幂等、可搜索、自动分类、敏感项拦截、SSRF 防线、自动项目关联。单 URL 剪藏支持可插拔提取后端（**stdlib 基线默认，Crawl4AI 可选增强**）。
 
 ```
-源连接器 ──▶ KnowledgeCard(v0.2.1 schema) ──▶ 校验 ──▶ SQLite + 事件日志 ──▶ Obsidian 笔记
+源连接器 ──▶ KnowledgeCard(v0.2.2 schema) ──▶ 校验 ──▶ SQLite + 事件日志 ──▶ Obsidian 笔记
   GitHub Stars                                                          GitHub-Stars/
   Browser Bookmarks ──▶ 分类 ──▶ blocked? ─是─▶ _blocked JSONL          Browser-Bookmarks/<分类>/
-  Single Web URL ──▶ SSRF 校验 ──▶ fetch ──▶ 提取 ──▶ 分类 ──▶ ...        Web-Clips/<分类>/
+  Single Web URL ──▶ SSRF 校验 ──▶ 提取(stdlib|crawl4ai|auto) ──▶ 分类    Web-Clips/<分类>/
 ```
 
 ## 快速开始
@@ -29,6 +29,10 @@ python scripts/ingest_bookmarks.py "C:\Users\<you>\Documents\bookmarks.html"
 
 # 4) 剪藏单个网页 URL（SSRF 安全，轻量 stdlib 提取）
 python scripts/ingest_url.py https://example.com/article
+
+# 可选：用 Crawl4AI 后端增强正文提取（需 pip install crawl4ai；缺失时 auto 自动降级 stdlib）
+python scripts/ingest_url.py https://example.com/article --extractor auto      # 优先 crawl4ai，失败降级
+python scripts/ingest_url.py https://example.com/article --extractor crawl4ai  # 强制 crawl4ai（缺失则明确报错）
 
 # 仅入库不导出 Obsidian
 python scripts/ingest_github_stars.py --no-obsidian

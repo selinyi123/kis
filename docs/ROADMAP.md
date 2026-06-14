@@ -29,16 +29,20 @@
 - [x] KIS-008 单 URL 网页剪藏：`python scripts/ingest_url.py <url>`（SSRF 防线 + stdlib 提取 + 分类 + Web-Clips 分目录 + blocked 日志）
 - [x] schema 演进 0.2.0 → 0.2.1（web-clip 字段）
 
-### P1（v0.2c 起）
-- [ ] KIS-009 Crawl4AI 可选增强（URL → 干净 markdown/json，作为可选 adapter，不替代 stdlib 基线）
+### v0.2c（已完成）
+- [x] KIS-009 Crawl4AI 可选增强（extractors 抽象：stdlib 基线 + crawl4ai 可选 adapter；延迟导入、非硬依赖、auto 降级、forced 明确报错）
+- [x] schema 演进 0.2.1 → 0.2.2（extraction 溯源 + clean_markdown/structured_data）
+
+### P1（后续）
 - [ ] KIS-008b 剪切板源接入（对接 ClipVault outbox）
 - [ ] KIS-009b 标签体系数据文件 `taxonomy.json` 驱动
 - [ ] KIS-011 近似去重（simhash/embedding）
 - [ ] KIS-012 GitHub JSONL 私备
 
-### P2（v0.3）
-- [ ] KIS-013 LLM 摘要 / 价值评分（放在多源采集之后）
+### P2（v0.3，多源材料齐备后）
+- [ ] KIS-013 LLM 摘要 / 价值评分（输入：38 stars + 39 bookmarks + web clips + crawl4ai 增强剪藏）
 - [ ] GBrain 只读试点（派生记忆层，关键结论回链来源）
+- [ ] MemOS 隔离实验
 
 ### P2
 - [ ] KIS-013 价值评分 v1（DPMS scoring 改造）
