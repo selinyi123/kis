@@ -1,0 +1,197 @@
+{
+  "metrics": {
+    "citation_traceability": 1.0,
+    "missing_source_rate": 0.0,
+    "unknown_when_no_source_rate": 1.0,
+    "sensitive_leakage_count": 0,
+    "wrong_relation_count": 0,
+    "conflict_detection_count": 0,
+    "stale_warning_count": 0,
+    "baseline_overlap": 1.0,
+    "answer_usefulness_score": 0.78
+  },
+  "per_question": [
+    {
+      "question_id": "q001",
+      "citation_traceability": 1,
+      "has_required_sources": 0,
+      "has_expected_claims": 0,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 3
+    },
+    {
+      "question_id": "q002",
+      "citation_traceability": 1,
+      "has_required_sources": 0,
+      "has_expected_claims": 0,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 3
+    },
+    {
+      "question_id": "q003",
+      "citation_traceability": 1,
+      "has_required_sources": 0,
+      "has_expected_claims": 1,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 4
+    },
+    {
+      "question_id": "q004",
+      "citation_traceability": 1,
+      "has_required_sources": 0,
+      "has_expected_claims": 0,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 3
+    },
+    {
+      "question_id": "q005",
+      "citation_traceability": 1,
+      "has_required_sources": 0,
+      "has_expected_claims": 0,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 3
+    },
+    {
+      "question_id": "q006",
+      "citation_traceability": 1,
+      "has_required_sources": 1,
+      "has_expected_claims": 0,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 4
+    },
+    {
+      "question_id": "q007",
+      "citation_traceability": 1,
+      "has_required_sources": 1,
+      "has_expected_claims": 0,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 4
+    },
+    {
+      "question_id": "q008",
+      "citation_traceability": 1,
+      "has_required_sources": 1,
+      "has_expected_claims": 1,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 5
+    },
+    {
+      "question_id": "q009",
+      "citation_traceability": 1,
+      "has_required_sources": 0,
+      "has_expected_claims": 0,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 3
+    },
+    {
+      "question_id": "q010",
+      "citation_traceability": 1,
+      "has_required_sources": 1,
+      "has_expected_claims": 0,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 4
+    },
+    {
+      "question_id": "q011",
+      "citation_traceability": 1,
+      "has_required_sources": 1,
+      "has_expected_claims": 0,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 4
+    },
+    {
+      "question_id": "q012",
+      "citation_traceability": 1,
+      "has_required_sources": 1,
+      "has_expected_claims": 0,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 4
+    },
+    {
+      "question_id": "q013",
+      "citation_traceability": 1,
+      "has_required_sources": 1,
+      "has_expected_claims": 0,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 4
+    },
+    {
+      "question_id": "q014",
+      "citation_traceability": 1,
+      "has_required_sources": 1,
+      "has_expected_claims": 0,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 4
+    },
+    {
+      "question_id": "q015",
+      "citation_traceability": 1,
+      "has_required_sources": 1,
+      "has_expected_claims": 1,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 5
+    },
+    {
+      "question_id": "q016",
+      "citation_traceability": 1,
+      "has_required_sources": 1,
+      "has_expected_claims": 0,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 4
+    },
+    {
+      "question_id": "q017",
+      "citation_traceability": 1,
+      "has_required_sources": 1,
+      "has_expected_claims": 1,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 5
+    },
+    {
+      "question_id": "q018",
+      "citation_traceability": 1,
+      "has_required_sources": 0,
+      "has_expected_claims": 1,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 4
+    },
+    {
+      "question_id": "q019",
+      "citation_traceability": 1,
+      "has_required_sources": 1,
+      "has_expected_claims": 0,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 4
+    },
+    {
+      "question_id": "q020",
+      "citation_traceability": 1,
+      "has_required_sources": 1,
+      "has_expected_claims": 0,
+      "sensitive_safe": 1,
+      "relation_safe": 1,
+      "overall": 4
+    }
+  ],
+  "relation_audit": [],
+  "leakage_audit": []
+}

@@ -1,0 +1,782 @@
+{
+  "generated_at": "2026-06-15T01:36:06Z",
+  "kis_version": "0.3.3",
+  "source_vault": "D:/TOOL/OBSIDIAN/Home/prompt仓库/KIS 知识情报系统",
+  "export_dir": ".kis/gbrain_trial\\exported_vault",
+  "included_files": [
+    {
+      "source_path": "01 调研报告与落地蓝图.md",
+      "export_path": "exported_vault/01 调研报告与落地蓝图.md",
+      "content_hash": "14802b37855d9ae5",
+      "size_bytes": 34899,
+      "sensitivity": "public",
+      "reason": "allowlisted root note"
+    },
+    {
+      "source_path": "02 架构.md",
+      "export_path": "exported_vault/02 架构.md",
+      "content_hash": "6a88b3650b23a005",
+      "size_bytes": 2588,
+      "sensitivity": "public",
+      "reason": "allowlisted root note"
+    },
+    {
+      "source_path": "03 路线图.md",
+      "export_path": "exported_vault/03 路线图.md",
+      "content_hash": "723ae987bf318102",
+      "size_bytes": 4183,
+      "sensitivity": "public",
+      "reason": "allowlisted root note"
+    },
+    {
+      "source_path": "04 开发日志 HANDOFF.md",
+      "export_path": "exported_vault/04 开发日志 HANDOFF.md",
+      "content_hash": "84d3c36e0ed97760",
+      "size_bytes": 8560,
+      "sensitivity": "public",
+      "reason": "allowlisted root note"
+    },
+    {
+      "source_path": "05 产品规格.md",
+      "export_path": "exported_vault/05 产品规格.md",
+      "content_hash": "67945c3916e6db45",
+      "size_bytes": 2443,
+      "sensitivity": "public",
+      "reason": "allowlisted root note"
+    },
+    {
+      "source_path": "KIS 知识情报系统 - 主页.md",
+      "export_path": "exported_vault/KIS 知识情报系统 - 主页.md",
+      "content_hash": "7f34904e4f5eb80d",
+      "size_bytes": 2570,
+      "sensitivity": "public",
+      "reason": "allowlisted root note"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Agent-Tools/Accio-Work---Local-First-Desktop-AI-Agent-That-Turns-Ideas-Into-Profits.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Agent-Tools/Accio-Work---Local-First-Desktop-AI-Agent-That-Turns-Ideas-Into-Profits.md",
+      "content_hash": "ae35c5d802faec85",
+      "size_bytes": 1521,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Agent-Tools/Hive-在浏览器里造一座-Agent-蜂巢.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Agent-Tools/Hive-在浏览器里造一座-Agent-蜂巢.md",
+      "content_hash": "a5a0b71ed712b529",
+      "size_bytes": 1490,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Agent-Tools/Perplexity-Computer-Tasks.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Agent-Tools/Perplexity-Computer-Tasks.md",
+      "content_hash": "c4afd2f562cd65c4",
+      "size_bytes": 1484,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Agent-Tools/所有技能-SkillHub.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Agent-Tools/所有技能-SkillHub.md",
+      "content_hash": "5bc5d3254e3d4a56",
+      "size_bytes": 1536,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/AI-Workspace/ChatGPT.md",
+      "export_path": "exported_vault/Browser-Bookmarks/AI-Workspace/ChatGPT.md",
+      "content_hash": "ac6e041077725e60",
+      "size_bytes": 2219,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/AI-Workspace/Codex-for-Open-Source-OpenAI.md",
+      "export_path": "exported_vault/Browser-Bookmarks/AI-Workspace/Codex-for-Open-Source-OpenAI.md",
+      "content_hash": "f59ffd40045dfc91",
+      "size_bytes": 1491,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/AI-Workspace/Google-AI-Studio.md",
+      "export_path": "exported_vault/Browser-Bookmarks/AI-Workspace/Google-AI-Studio.md",
+      "content_hash": "854453426257dd78",
+      "size_bytes": 1793,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/AI-Workspace/Google-Gemini.md",
+      "export_path": "exported_vault/Browser-Bookmarks/AI-Workspace/Google-Gemini.md",
+      "content_hash": "eb43028af230e84c",
+      "size_bytes": 1442,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/AI-Workspace/Spaces---Hugging-Face.md",
+      "export_path": "exported_vault/Browser-Bookmarks/AI-Workspace/Spaces---Hugging-Face.md",
+      "content_hash": "f492ac4c3401a433",
+      "size_bytes": 1446,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/AI-Workspace/Z-ai---Inspiring-AGI-to-Benefit-Humanity.md",
+      "export_path": "exported_vault/Browser-Bookmarks/AI-Workspace/Z-ai---Inspiring-AGI-to-Benefit-Humanity.md",
+      "content_hash": "b5807862a46bb1bd",
+      "size_bytes": 1484,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Dev-Resources/DeepL翻译-全世界最准确的翻译.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Dev-Resources/DeepL翻译-全世界最准确的翻译.md",
+      "content_hash": "515caba18c7b7cc5",
+      "size_bytes": 1509,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Dev-Resources/GitHub-----GitHub.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Dev-Resources/GitHub-----GitHub.md",
+      "content_hash": "9d9906a19e606be7",
+      "size_bytes": 1412,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Dev-Resources/GitHub中文社区.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Dev-Resources/GitHub中文社区.md",
+      "content_hash": "6ae37bc5ad8a6326",
+      "size_bytes": 1411,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Dev-Resources/ScriptCat---分享你的用户脚本.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Dev-Resources/ScriptCat---分享你的用户脚本.md",
+      "content_hash": "a693ceca0b429b08",
+      "size_bytes": 1463,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Dev-Resources/博客园---开发者的网上家园.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Dev-Resources/博客园---开发者的网上家园.md",
+      "content_hash": "225200a20addb9aa",
+      "size_bytes": 1453,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/General/Genius-Margins-Noah-Zender-Substack.md",
+      "export_path": "exported_vault/Browser-Bookmarks/General/Genius-Margins-Noah-Zender-Substack.md",
+      "content_hash": "be62f64cd38ff17d",
+      "size_bytes": 1468,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/General/Helio-the-AI-native-team-workspace.md",
+      "export_path": "exported_vault/Browser-Bookmarks/General/Helio-the-AI-native-team-workspace.md",
+      "content_hash": "af5dcca8f6e7dac5",
+      "size_bytes": 1439,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/General/News---YouTube.md",
+      "export_path": "exported_vault/Browser-Bookmarks/General/News---YouTube.md",
+      "content_hash": "f9f47102f2c2d8c1",
+      "size_bytes": 1497,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/General/Qiaomu-Artist-Style.md",
+      "export_path": "exported_vault/Browser-Bookmarks/General/Qiaomu-Artist-Style.md",
+      "content_hash": "8d925385324ea0a9",
+      "size_bytes": 1439,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/General/Sweetie-Fox---Channel-page---XVIDEOS-COM.md",
+      "export_path": "exported_vault/Browser-Bookmarks/General/Sweetie-Fox---Channel-page---XVIDEOS-COM.md",
+      "content_hash": "bfae9bdfe95c8b86",
+      "size_bytes": 1513,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/General/Vibe-Shot-Club.md",
+      "export_path": "exported_vault/Browser-Bookmarks/General/Vibe-Shot-Club.md",
+      "content_hash": "b82af9d668f8759d",
+      "size_bytes": 1394,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/General/WildAI.md",
+      "export_path": "exported_vault/Browser-Bookmarks/General/WildAI.md",
+      "content_hash": "c6818b78574f9b93",
+      "size_bytes": 1393,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/General/X.md",
+      "export_path": "exported_vault/Browser-Bookmarks/General/X.md",
+      "content_hash": "46c3ddf064847bd9",
+      "size_bytes": 1673,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/General/充值-订阅---Fenno.md",
+      "export_path": "exported_vault/Browser-Bookmarks/General/充值-订阅---Fenno.md",
+      "content_hash": "e407dad88f81f900",
+      "size_bytes": 1508,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/General/循环-预构建的代理循环.md",
+      "export_path": "exported_vault/Browser-Bookmarks/General/循环-预构建的代理循环.md",
+      "content_hash": "43e90379c5cd9ed3",
+      "size_bytes": 1444,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/General/耐视点播_最新Netflix新剧_韩国电影免费.md",
+      "export_path": "exported_vault/Browser-Bookmarks/General/耐视点播_最新Netflix新剧_韩国电影免费.md",
+      "content_hash": "1b1fbfef5059ad48",
+      "size_bytes": 1453,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Ops-Internal/IP-查询---IP分流测试---Net-Coffee.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Ops-Internal/IP-查询---IP分流测试---Net-Coffee.md",
+      "content_hash": "440295601dd35307",
+      "size_bytes": 1472,
+      "sensitivity": "internal",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Ops-Internal/中南民族大学-WebVPN.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Ops-Internal/中南民族大学-WebVPN.md",
+      "content_hash": "40ca7b6bd341734b",
+      "size_bytes": 1502,
+      "sensitivity": "internal",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Ops-Internal/红米Turbo-4-ROM展示-ROM下载-刷机包下载-ROM乐园官网.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Ops-Internal/红米Turbo-4-ROM展示-ROM下载-刷机包下载-ROM乐园官网.md",
+      "content_hash": "b46f45031651f61f",
+      "size_bytes": 1594,
+      "sensitivity": "internal",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Ops-Internal/酷友社---酷酷软件中心-酷友社论坛有海量应用教程与问题反馈-覆盖Docker-智能家居-影音存储-华硕路由专属优化-玩转iStoreOS及开源项目-酷友社助你.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Ops-Internal/酷友社---酷酷软件中心-酷友社论坛有海量应用教程与问题反馈-覆盖Docker-智能家居-影音存储-华硕路由专属优化-玩转iStoreOS及开源项目-酷友社助你.md",
+      "content_hash": "db1b74a4dd5a1272",
+      "size_bytes": 1863,
+      "sensitivity": "internal",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Research/AnySearch-面向智能体的AI搜索基础设施.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Research/AnySearch-面向智能体的AI搜索基础设施.md",
+      "content_hash": "524fa8b867cce28f",
+      "size_bytes": 1625,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Research/Publishers---Open-Access-Library.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Research/Publishers---Open-Access-Library.md",
+      "content_hash": "067dfb699d7d658d",
+      "size_bytes": 1506,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Research/秘塔AI搜索.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Research/秘塔AI搜索.md",
+      "content_hash": "3fded7f10f60ebe8",
+      "size_bytes": 1396,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Trading-Research/EasyQuant-生成式-AI-编程助手-支持PTrade-QMT-聚宽.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Trading-Research/EasyQuant-生成式-AI-编程助手-支持PTrade-QMT-聚宽.md",
+      "content_hash": "876bbf947ec251f8",
+      "size_bytes": 1697,
+      "sensitivity": "internal",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Trading-Research/Polymarket-全球最大预测市场.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Trading-Research/Polymarket-全球最大预测市场.md",
+      "content_hash": "d1cff6c3b24d1c5a",
+      "size_bytes": 1534,
+      "sensitivity": "internal",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Trading-Research/TrenchersAI-专为战壕设计的AI原生交易终端.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Trading-Research/TrenchersAI-专为战壕设计的AI原生交易终端.md",
+      "content_hash": "111579c4cd592c00",
+      "size_bytes": 1662,
+      "sensitivity": "internal",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Visual-Tools/GPT-Image2-Prompt-Gallery.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Visual-Tools/GPT-Image2-Prompt-Gallery.md",
+      "content_hash": "0036383d68ef16e4",
+      "size_bytes": 1521,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Visual-Tools/Rodin-AI---Free-AI-3D-Model-Generator-For-Everyone-Instantly-Create-Stunning-3D-.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Visual-Tools/Rodin-AI---Free-AI-3D-Model-Generator-For-Everyone-Instantly-Create-Stunning-3D-.md",
+      "content_hash": "7442541ca9ca9b2f",
+      "size_bytes": 1658,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Browser-Bookmarks/Visual-Tools/Tripo-Studio-你的下一站-AI-3D-工作台.md",
+      "export_path": "exported_vault/Browser-Bookmarks/Visual-Tools/Tripo-Studio-你的下一站-AI-3D-工作台.md",
+      "content_hash": "c7762ba66ada44b9",
+      "size_bytes": 1707,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Dashboards/Archive Candidates.md",
+      "export_path": "exported_vault/Dashboards/Archive Candidates.md",
+      "content_hash": "3936b2d23044fc1c",
+      "size_bytes": 20041,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Dashboards/Canonical Candidates.md",
+      "export_path": "exported_vault/Dashboards/Canonical Candidates.md",
+      "content_hash": "1717c9bdc9898673",
+      "size_bytes": 898,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Dashboards/Deferred Queue.md",
+      "export_path": "exported_vault/Dashboards/Deferred Queue.md",
+      "content_hash": "547be5b9f28e9657",
+      "size_bytes": 272,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Dashboards/KIS Review Dashboard.md",
+      "export_path": "exported_vault/Dashboards/KIS Review Dashboard.md",
+      "content_hash": "a43092ebfc81d600",
+      "size_bytes": 751,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Dashboards/Rejected Queue.md",
+      "export_path": "exported_vault/Dashboards/Rejected Queue.md",
+      "content_hash": "6e40a2722ad9a2e4",
+      "size_bytes": 272,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Dashboards/Review Inbox.md",
+      "export_path": "exported_vault/Dashboards/Review Inbox.md",
+      "content_hash": "c2e42763b25c8960",
+      "size_bytes": 69525,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Dashboards/Review Stats.md",
+      "export_path": "exported_vault/Dashboards/Review Stats.md",
+      "content_hash": "d0c32d5b95effd72",
+      "size_bytes": 1355,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/alexmcdonnell-airtable-hyperagent-public-skills.md",
+      "export_path": "exported_vault/GitHub-Stars/alexmcdonnell-airtable-hyperagent-public-skills.md",
+      "content_hash": "3cebfd67eef0e367",
+      "size_bytes": 1717,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/anysearch-ai-anysearch-skill.md",
+      "export_path": "exported_vault/GitHub-Stars/anysearch-ai-anysearch-skill.md",
+      "content_hash": "9b30aae0a5edc196",
+      "size_bytes": 1742,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/byoungd-English-level-up-tips.md",
+      "export_path": "exported_vault/GitHub-Stars/byoungd-English-level-up-tips.md",
+      "content_hash": "30a233d2cc1d1203",
+      "size_bytes": 1747,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/ChaoMixian-vFlow.md",
+      "export_path": "exported_vault/GitHub-Stars/ChaoMixian-vFlow.md",
+      "content_hash": "cfb02cd04dac8107",
+      "size_bytes": 2074,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/chengaopan-AutoMergePublicNodes.md",
+      "export_path": "exported_vault/GitHub-Stars/chengaopan-AutoMergePublicNodes.md",
+      "content_hash": "e991901af4082830",
+      "size_bytes": 1989,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/CloakHQ-CloakBrowser.md",
+      "export_path": "exported_vault/GitHub-Stars/CloakHQ-CloakBrowser.md",
+      "content_hash": "ef3322f7c324ed84",
+      "size_bytes": 2067,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/colbymchenry-codegraph.md",
+      "export_path": "exported_vault/GitHub-Stars/colbymchenry-codegraph.md",
+      "content_hash": "e1abe60cede64391",
+      "size_bytes": 1876,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/dontbesilent2025-dbskill.md",
+      "export_path": "exported_vault/GitHub-Stars/dontbesilent2025-dbskill.md",
+      "content_hash": "127ed2f461872aef",
+      "size_bytes": 1598,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/Egonex-AI-Understand-Anything.md",
+      "export_path": "exported_vault/GitHub-Stars/Egonex-AI-Understand-Anything.md",
+      "content_hash": "d22618aedf16ce1d",
+      "size_bytes": 2302,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/Fincept-Corporation-FinceptTerminal.md",
+      "export_path": "exported_vault/GitHub-Stars/Fincept-Corporation-FinceptTerminal.md",
+      "content_hash": "282cd5dc4a4b3631",
+      "size_bytes": 2245,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/freestylefly-wesight.md",
+      "export_path": "exported_vault/GitHub-Stars/freestylefly-wesight.md",
+      "content_hash": "0c560989ee24fcd4",
+      "size_bytes": 1952,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/garrytan-gbrain.md",
+      "export_path": "exported_vault/GitHub-Stars/garrytan-gbrain.md",
+      "content_hash": "cc5f0d393b5fd67d",
+      "size_bytes": 1477,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/GoogleCloudPlatform-knowledge-catalog.md",
+      "export_path": "exported_vault/GitHub-Stars/GoogleCloudPlatform-knowledge-catalog.md",
+      "content_hash": "b78c081fc6ef2db2",
+      "size_bytes": 1632,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/hardikpandya-stop-slop.md",
+      "export_path": "exported_vault/GitHub-Stars/hardikpandya-stop-slop.md",
+      "content_hash": "c48a895893eeffb7",
+      "size_bytes": 1470,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/Hmbown-CodeWhale.md",
+      "export_path": "exported_vault/GitHub-Stars/Hmbown-CodeWhale.md",
+      "content_hash": "084c28d2b3062feb",
+      "size_bytes": 1608,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/lijigang-ljg-skills.md",
+      "export_path": "exported_vault/GitHub-Stars/lijigang-ljg-skills.md",
+      "content_hash": "b7ff2a2c8e76ca5b",
+      "size_bytes": 1453,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/MemTensor-MemOS.md",
+      "export_path": "exported_vault/GitHub-Stars/MemTensor-MemOS.md",
+      "content_hash": "aa0a2a36245279e0",
+      "size_bytes": 2016,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/michaelpersonal-book-distill.md",
+      "export_path": "exported_vault/GitHub-Stars/michaelpersonal-book-distill.md",
+      "content_hash": "a6c194addc40fdc5",
+      "size_bytes": 1529,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/mvanhorn-last30days-skill.md",
+      "export_path": "exported_vault/GitHub-Stars/mvanhorn-last30days-skill.md",
+      "content_hash": "29a48dd77e8ec94e",
+      "size_bytes": 2062,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/NanmiCoder-MediaCrawler.md",
+      "export_path": "exported_vault/GitHub-Stars/NanmiCoder-MediaCrawler.md",
+      "content_hash": "6779438ab2412559",
+      "size_bytes": 1945,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/nexu-io-open-design.md",
+      "export_path": "exported_vault/GitHub-Stars/nexu-io-open-design.md",
+      "content_hash": "b8f108f87e86c574",
+      "size_bytes": 2887,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/nolly-studio-cult-ui.md",
+      "export_path": "exported_vault/GitHub-Stars/nolly-studio-cult-ui.md",
+      "content_hash": "b1e8d7b2d5a700e8",
+      "size_bytes": 1818,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/obra-superpowers.md",
+      "export_path": "exported_vault/GitHub-Stars/obra-superpowers.md",
+      "content_hash": "1ec597a27e727209",
+      "size_bytes": 1619,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/OpenBMB-VoxCPM.md",
+      "export_path": "exported_vault/GitHub-Stars/OpenBMB-VoxCPM.md",
+      "content_hash": "3b52c1535707620a",
+      "size_bytes": 1765,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/opensquilla-opensquilla.md",
+      "export_path": "exported_vault/GitHub-Stars/opensquilla-opensquilla.md",
+      "content_hash": "906d271a8ff8b4df",
+      "size_bytes": 1828,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/ovmvo-FreeSub.md",
+      "export_path": "exported_vault/GitHub-Stars/ovmvo-FreeSub.md",
+      "content_hash": "3edaa8d838ae8386",
+      "size_bytes": 1986,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/Panniantong-Agent-Reach.md",
+      "export_path": "exported_vault/GitHub-Stars/Panniantong-Agent-Reach.md",
+      "content_hash": "9726860df77eb8de",
+      "size_bytes": 2095,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/paywallpro-paywall-gallery.md",
+      "export_path": "exported_vault/GitHub-Stars/paywallpro-paywall-gallery.md",
+      "content_hash": "6a4aa04b64de83c5",
+      "size_bytes": 1865,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/phuryn-pm-skills.md",
+      "export_path": "exported_vault/GitHub-Stars/phuryn-pm-skills.md",
+      "content_hash": "63595eea491ba09d",
+      "size_bytes": 1856,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/ruvnet-RuView.md",
+      "export_path": "exported_vault/GitHub-Stars/ruvnet-RuView.md",
+      "content_hash": "f13fc558f347a8e0",
+      "size_bytes": 2084,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/selinyi123-clipvault-personal.md",
+      "export_path": "exported_vault/GitHub-Stars/selinyi123-clipvault-personal.md",
+      "content_hash": "e978eaa427404411",
+      "size_bytes": 1425,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/selinyi123-DPMS-Platform.md",
+      "export_path": "exported_vault/GitHub-Stars/selinyi123-DPMS-Platform.md",
+      "content_hash": "ddf85d29c27d680f",
+      "size_bytes": 1652,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/selinyi123-prompt-performance-engine.md",
+      "export_path": "exported_vault/GitHub-Stars/selinyi123-prompt-performance-engine.md",
+      "content_hash": "4a7b946023cef872",
+      "size_bytes": 1709,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/shanmiteko-LotteryAutoScript.md",
+      "export_path": "exported_vault/GitHub-Stars/shanmiteko-LotteryAutoScript.md",
+      "content_hash": "b3aa9536755ffc2f",
+      "size_bytes": 1602,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/siddharthvaddem-openscreen.md",
+      "export_path": "exported_vault/GitHub-Stars/siddharthvaddem-openscreen.md",
+      "content_hash": "9410ba260d15e375",
+      "size_bytes": 1796,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/sunmoon-orbit-Keep-the-crow.md",
+      "export_path": "exported_vault/GitHub-Stars/sunmoon-orbit-Keep-the-crow.md",
+      "content_hash": "ea932c5e12e55944",
+      "size_bytes": 1532,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/unclecode-crawl4ai.md",
+      "export_path": "exported_vault/GitHub-Stars/unclecode-crawl4ai.md",
+      "content_hash": "ee13a69d9c6d5963",
+      "size_bytes": 1745,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/wiltodelta-remove-ai-watermarks.md",
+      "export_path": "exported_vault/GitHub-Stars/wiltodelta-remove-ai-watermarks.md",
+      "content_hash": "5c362e7d658c0bae",
+      "size_bytes": 2113,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "GitHub-Stars/WLget-V2Ray_configs_64.md",
+      "export_path": "exported_vault/GitHub-Stars/WLget-V2Ray_configs_64.md",
+      "content_hash": "c0da757e3c4ac35a",
+      "size_bytes": 1667,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Web-Clips/Agent-Tools/GitHub---MemTensor-MemOS-Self-evolving-memory-OS-for-LLM-AI-Agents-ultra-persist.md",
+      "export_path": "exported_vault/Web-Clips/Agent-Tools/GitHub---MemTensor-MemOS-Self-evolving-memory-OS-for-LLM-AI-Agents-ultra-persist.md",
+      "content_hash": "14709d2c95ba4f54",
+      "size_bytes": 6505,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Web-Clips/AI-Workspace/Hugging-Face-The-AI-community-building-the-future.md",
+      "export_path": "exported_vault/Web-Clips/AI-Workspace/Hugging-Face-The-AI-community-building-the-future.md",
+      "content_hash": "96dd11a58426913a",
+      "size_bytes": 6096,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Web-Clips/General/Example-Domain.md",
+      "export_path": "exported_vault/Web-Clips/General/Example-Domain.md",
+      "content_hash": "1a66b4734b988a15",
+      "size_bytes": 1895,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Web-Clips/General/Python-Insider.md",
+      "export_path": "exported_vault/Web-Clips/General/Python-Insider.md",
+      "content_hash": "6b5a926b94b9f7a3",
+      "size_bytes": 3271,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    },
+    {
+      "source_path": "Web-Clips/Visual-Tools/Tripo-Easy-2D-to-3D-Free-AI-3D-Models-From-Images-or-Texts.md",
+      "export_path": "exported_vault/Web-Clips/Visual-Tools/Tripo-Easy-2D-to-3D-Free-AI-3D-Models-From-Images-or-Texts.md",
+      "content_hash": "3c430fe2dbbf683f",
+      "size_bytes": 6033,
+      "sensitivity": "public",
+      "reason": "allowlisted directory"
+    }
+  ],
+  "denied_files": [],
+  "summary": {
+    "included_count": 96,
+    "denied_count": 0,
+    "total_bytes": 303814
+  }
+}

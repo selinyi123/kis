@@ -25,6 +25,12 @@ python scripts/build_review_dashboard.py --dry-run
 ```
 生成 7 页到 `Dashboards/`（总览/Inbox/Canonical/Archive/Deferred/Rejected/Stats）。看板只读、只给建议命令；状态变更仍走 review CLI。见 [docs/KIS-015_REVIEW_DASHBOARD.md](docs/KIS-015_REVIEW_DASHBOARD.md)。
 
+GBrain 只读试点（KIS-016，验证派生索引层，不污染事实源/不泄敏/不写回）：
+```powershell
+python scripts/gbrain_trial.py all --adapter mock --vault-dir "D:\TOOL\OBSIDIAN\Home\prompt仓库\KIS 知识情报系统"
+```
+安全导出快照 → 20 问题 → baseline 对照 → 评估 → `.kis/gbrain_trial/runs/latest/trial_report.md`。GBrain 非硬依赖（mock/manual 离线，subprocess 可选）。见 [docs/KIS-016_GBRAIN_READONLY_TRIAL.md](docs/KIS-016_GBRAIN_READONLY_TRIAL.md)。
+
 ```
 采集: GitHub Stars / Browser Bookmarks / Single Web URL ──▶ KnowledgeCard(v0.3.0)
         ──▶ 分类 / SSRF / blocked 拦截 ──▶ SQLite + 事件日志 ──▶ Obsidian
