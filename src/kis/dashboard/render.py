@@ -117,7 +117,7 @@ def _counter_table(title: str, counts: dict[str, int]) -> list[str]:
     return out
 
 
-def render_stats(stats: dict[str, Any], generated_at: str) -> str:
+def render_stats(stats: dict[str, Any], generated_at: str, last_ingest: dict[str, Any] | None = None) -> str:
     out = _header("Review Stats", generated_at)
     out.append(f"**Total Cards: {stats.get('total', 0)}**\n")
     out += _counter_table("By Lifecycle", stats["by_lifecycle"])
@@ -128,6 +128,17 @@ def render_stats(stats: dict[str, Any], generated_at: str) -> str:
     out += _counter_table("By Project Relevance", stats["by_project_relevance"])
     out += _counter_table("By Sensitivity", stats["by_sensitivity"])
     out += _counter_table("By Generated Day", stats["by_generated_day"])
+    ext = stats.get("external_inbox", {})
+    out.append(f"### External Inbox (total {ext.get('total', 0)})\n")
+    out += _counter_table("External Inbox by Source Type", ext.get("by_source_type", {}))
+    out += _counter_table("External Inbox by Project", ext.get("by_project", {}))
+    if last_ingest:
+        out += ["### Last Ingest Run", "", "| Metric | Count |", "|---|---:|",
+                f"| source_type | {last_ingest.get('source_type', '-')} |",
+                f"| created | {last_ingest.get('created', 0)} |",
+                f"| skipped_duplicate | {last_ingest.get('skipped_duplicate', 0)} |",
+                f"| blocked | {last_ingest.get('blocked', 0)} |",
+                f"| errors | {last_ingest.get('errors', 0)} |", ""]
     return "\n".join(out)
 
 
@@ -150,6 +161,7 @@ def render_overview(cards: list[dict[str, Any]], counts: dict[str, int],
         f"- Needs Review (Inbox): {counts.get('inbox', 0)}",
         f"- Canonical Candidates: {candidate_counts.get('canonical', 0)}",
         f"- Archive Candidates: {candidate_counts.get('archive', 0)}",
+        f"- External Inbox: {candidate_counts.get('external_inbox', 0)}",
         f"- Deferred: {counts.get('deferred', 0)}",
         f"- Rejected: {counts.get('rejected', 0)}",
         "",

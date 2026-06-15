@@ -35,6 +35,11 @@ def compute_review_stats(cards: list[dict[str, Any]]) -> dict[str, dict[str, int
             if rel.get(p, 0) >= _RELEVANT:
                 by_project[p] += 1
 
+    # External Inbox (KIS-018): inbox cards by source_type and by project.
+    inbox = [c for c in cards if c["lifecycle"].get("state") == "inbox"]
+    ext_src: Counter = Counter(c["source"].get("source_type", "unknown") for c in inbox)
+    ext_proj: Counter = Counter((c["linkage"].get("projects") or ["(none)"])[0] for c in inbox)
+
     return {
         "by_lifecycle": dict(by_lifecycle),
         "by_source_type": dict(by_source_type),
@@ -44,5 +49,10 @@ def compute_review_stats(cards: list[dict[str, Any]]) -> dict[str, dict[str, int
         "by_sensitivity": dict(by_sensitivity),
         "by_generated_day": dict(by_generated_day),
         "by_project_relevance": dict(by_project),
+        "external_inbox": {
+            "total": len(inbox),
+            "by_source_type": dict(ext_src),
+            "by_project": dict(ext_proj),
+        },
         "total": len(cards),
     }

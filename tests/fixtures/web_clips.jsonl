@@ -1,0 +1,5 @@
+{"url": "https://example.com/a", "title": "Knowledge Article A", "text": "notes about a knowledge runtime", "source": "manual", "captured_at": "2026-06-15T00:00:00Z"}
+{"url": "https://example.com/a", "title": "Knowledge Article A (dup)", "text": "notes about a knowledge runtime", "source": "manual"}
+{"url": "https://example.com/secret", "title": "Leak", "text": "my key is sk-ABCDEFGHIJKLMNOPQRSTUVWX here", "source": "manual"}
+{"title": "No URL clip", "text": "this clip has no url"}
+not-a-json-line

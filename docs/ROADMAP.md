@@ -61,11 +61,19 @@
   * `src/kis/gbrain_trial/` + `scripts/gbrain_trial.py`；三层隔离；只读不写回；GBrain 非硬依赖；离线
   * 实测 included=96/denied=0，traceability=1.0/leakage=0；decision=keep_readonly（真实 GBrain 对比待补）
 
+### v0.3.3（已完成）
+- [x] KIS-016 GBrain 只读试点 + KIS-016R 真实 GBrain（Ollama）跑完 20 问 → **判 B**（安全可用但未跑赢免费 keyword baseline，保持 read-only，不进 KIS-017）
+
+### v0.3.4（已完成）
+- [x] KIS-018 External Inbox Ingestion：github-stars/bookmarks/web-clips 三入口（无网络）→ 安全/去重/inbox/Obsidian External-Inbox/report/dashboard
+  * 全落 inbox，不自动 reviewed/canonical；secret guard；幂等；dry-run 一致；不覆盖 canonical
+
 ### 下一阶段（用户定）
-- [ ] **真实 GBrain 运行**（manual/subprocess）跑完 20 问题 → 据 A/B/C 决定是否进 KIS-017
-- [ ] KIS-017 Memory benchmark via Prompt Engine（A 通过后）
-- [ ] KIS-018 External inbox ingestion
+- [ ] KIS-019 Crawl4AI 显式 URL 抓取（可选增强）
+- [ ] KIS-020 Hard Semantic Benchmark v2（更难问题集/更大语料）
+- [ ] KIS-021 Provider 对比：Ollama / BGE-M3 / DashScope（GBrain 复测，含 large/多语言）
 - [ ] MemOS 隔离实验
+- GBrain 保持只读候选（语料扩大后复测）
 
 ### 其它待办
 - [ ] KIS-008b 剪切板源（对接 ClipVault outbox）

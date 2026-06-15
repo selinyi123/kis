@@ -179,6 +179,41 @@ def render_webclip_md(card: dict[str, Any]) -> str:
     return "\n".join(out)
 
 
+def render_external_inbox_md(card: dict[str, Any]) -> str:
+    """External-Inbox card (KIS-018): Source/Content/Safety/Lifecycle/Review +
+    suggested review commands. Never offers an approve command (inbox only)."""
+    src, c, saf, life = card["source"], card["content"], card["safety"], card["lifecycle"]
+    cid = card["id"]
+    out = _frontmatter(card)
+    out += [f"# {c.get('title', cid)}", "",
+            "## Source",
+            f"- Type: {src.get('source_type')}",
+            f"- URL: [{src.get('url')}]({src.get('url')})",
+            f"- Source ID: {src.get('source_id', '')}",
+            f"- Captured: {src.get('captured_at')}",
+            f"- Content Hash: {card.get('content_hash', '')[:16]}",
+            "",
+            "## Content", "", c.get("body_md", ""), "",
+            "## Safety",
+            f"- Sensitivity: {saf.get('sensitivity', 'public')}",
+            f"- Secret-redacted: {saf.get('secret_redacted', False)}",
+            "",
+            "## Lifecycle",
+            f"- State: {life.get('state', 'inbox')}",
+            f"- Version: {life.get('version', 1)}",
+            "",
+            "## Review",
+            "- Decision: pending",
+            "",
+            "## Suggested Review Commands", "", "```bash",
+            f'python scripts/review_cards.py mark-reviewed --card-id {cid} --reason "verified source"',
+            f'python scripts/review_cards.py archive --card-id {cid} --reason "low relevance"',
+            f'python scripts/review_cards.py defer --card-id {cid} --reason "revisit later"',
+            f'python scripts/review_cards.py reject --card-id {cid} --reason "not useful"',
+            "```", ""]
+    return "\n".join(out)
+
+
 def export_card(
     card: dict[str, Any],
     out_dir: str,

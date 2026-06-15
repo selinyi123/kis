@@ -34,6 +34,18 @@ from kis.review.queue import queue_counts  # noqa: E402
 from kis.store import Store  # noqa: E402
 
 
+def _load_last_ingest():
+    import json
+    p = os.path.join("data", "ingest_reports", "latest.json")
+    if os.path.exists(p):
+        try:
+            with open(p, encoding="utf-8") as fh:
+                return json.load(fh)
+        except (OSError, ValueError):
+            return None
+    return None
+
+
 def build_pages(cards: list[dict], generated_at: str, only: str | None = None) -> dict[str, str]:
     """Return {filename: body}. Pure given cards + generated_at."""
     counts = queue_counts(cards)
@@ -45,10 +57,12 @@ def build_pages(cards: list[dict], generated_at: str, only: str | None = None) -
     stats = compute_review_stats(cards)
     candidate_counts = {
         "canonical": len(canonical), "archive": len(archive),
+        "external_inbox": stats.get("external_inbox", {}).get("total", 0),
         "hot_integrate": sum(1 for c in cards if c.get("derived", {}).get("value_level") == "hot"
                              and c.get("derived", {}).get("next_action") == "integrate"),
         "critical": stats["by_value_level"].get("critical", 0),
     }
+    last_ingest = _load_last_ingest()
 
     pages = {
         PAGE_OVERVIEW: render.render_overview(cards, counts, candidate_counts, generated_at),
@@ -57,7 +71,7 @@ def build_pages(cards: list[dict], generated_at: str, only: str | None = None) -
         PAGE_ARCHIVE: render.render_archive(archive, generated_at),
         PAGE_DEFERRED: render.render_deferred(deferred, generated_at),
         PAGE_REJECTED: render.render_rejected(rejected, generated_at),
-        PAGE_STATS: render.render_stats(stats, generated_at),
+        PAGE_STATS: render.render_stats(stats, generated_at, last_ingest),
     }
     if only:
         wanted = set(ONLY_MAP.get(only, []))

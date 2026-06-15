@@ -3,7 +3,9 @@
 > 本文件是 KIS 项目状态的唯一事实源（沿用 ClipVault 纪律）。每次切片完成后更新。
 
 ## 当前状态（2026-06-15）
-- **阶段**：**v0.3.3 已交付** — GBrain 只读试点（KIS-016）。**schema 不变（0.3.1）**，纯试点工具，产物在 `.kis/`（gitignored）。
+- **阶段**：**v0.3.4 已交付** — 外部 Inbox 摄取（KIS-018）。**schema 不变（0.3.1）**，复用现有 KnowledgeCard。
+- **v0.3.4 实测**：新增 `src/kis/ingest/`（safety/normalizer/dedupe/github_stars/bookmarks/web_clips/runner/report）+ `scripts/ingest_external.py` + 3 文档 + obsidian `render_external_inbox_md` + dashboard external_inbox 统计。三个低风险入口（github-stars/bookmarks/web-clips，**全无网络**，导入已导出文件）→ 安全(secret guard)→去重(normalized_url/content_hash/source_id)→ store(inbox)→ Obsidian `External-Inbox/`。**铁律：全部落 inbox(review=pending)，不自动 reviewed/canonical，不绕过 KIS-014；secret/blocked 不入库不入 Obsidian 仅进 report；不覆盖已有 canonical；dry-run 计数==real；幂等**。实测 fixtures：github seen4/created2/dup1/blocked1；bookmark seen5/created3/dup1/blocked1；web_clip seen5/created1/dup1/blocked1/errors2。dashboard External Inbox total=6 by source_type。**172/172 pytest 全绿**（+22；零网络/零 ResourceWarning）。`browser_bookmark` 复用既有 `web_bookmark`，不改 schema。报告写 `data/ingest_reports/`（gitignored）。
+- **阶段（历史）**：v0.3.3 GBrain 只读试点（KIS-016/016R 判 B）；
 - **v0.3.3 实测**：新增 `src/kis/gbrain_trial/`（config/filters/manifest/exporter/questions/baseline_search/adapters/runner/evaluator/report）+ `scripts/gbrain_trial.py`（export/questions/baseline/run/evaluate/report/all）+ 4 文档。三层隔离：vault→安全导出→快照→GBrain→仅报告。**铁律：GBrain 只读过滤快照不读原 vault；secret/blocked/DPMS 凭据(cookie/token/profile/qr/session)/.env/.db/.key 拒绝；不写回/不改 store/lifecycle/canonical；GBrain 非硬依赖，mock/manual 离线，subprocess 缺失优雅降级；输出仅 trial artifacts**。实测真实 vault：included=96 denied=0（vault 本就无敏感文件；过滤排除力由单测含 secret 的临时 vault 证明 denied≥6），citation_traceability=1.0 leakage=0 wrong_relation=0，decision keep_readonly/no writeback/no canonical。**148/148 pytest**（+35；零网络/零 LLM/零真实 GBrain/零 ResourceWarning）。
 - **诚实说明**：mock 是 baseline 支撑→baseline_overlap=1.0、promote=yes 仅表示**框架+安全就绪**，非"GBrain 优于 baseline"真实结论；A/B/C 判断须等真实 GBrain（manual/subprocess）跑完。试点期修复 2 真实缺陷：泄漏检测改真实密钥模式（去 author→auth 假阳性）、二进制判定改只看 NUL（修中文 .md 误判）。
 - **KIS-016R（真实 GBrain 质量验证）状态：装到导入为止，停在付费查询前**（2026-06-15，用户授权）。
