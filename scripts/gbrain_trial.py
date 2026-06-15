@@ -83,6 +83,28 @@ def cmd_baseline(args):
     return 0
 
 
+def cmd_manual_template(args):
+    """Emit a stub JSONL (20 questions) for a human to fill from a real GBrain
+    session, then `run --adapter manual` consumes it. Turnkey manual path."""
+    _, _, run_dir = _paths(args.out_dir)
+    os.makedirs(run_dir, exist_ok=True)
+    path = os.path.join(run_dir, "gbrain_manual_input.jsonl")
+    if os.path.exists(path) and not args.force:
+        print(f"[kis] manual template already exists (use --force to overwrite): {path}")
+        return 0
+    with open(path, "w", encoding="utf-8") as fh:
+        for q in _load_questions(args.questions):
+            fh.write(json.dumps({
+                "question_id": q["id"], "question": q["question"], "answer": "",
+                "citations": [], "gaps": [], "conflicts": [], "stale_warnings": [],
+                "entities": [], "relations": [],
+            }, ensure_ascii=False) + "\n")
+    print(f"[kis] manual template -> {path}\n"
+          f"      fill 'answer'/'citations' from a real GBrain session, then:\n"
+          f"      python scripts/gbrain_trial.py run --adapter manual && ... evaluate && ... report")
+    return 0
+
+
 def cmd_run(args):
     export_dir, _, run_dir = _paths(args.out_dir)
     adapter = _build_adapter(args.adapter, export_dir, run_dir)
@@ -142,7 +164,8 @@ def cmd_all(args):
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="KIS-016 GBrain read-only trial.")
-    ap.add_argument("command", choices=["export", "questions", "baseline", "run", "evaluate", "report", "all"])
+    ap.add_argument("command", choices=["export", "questions", "baseline", "manual-template",
+                                        "run", "evaluate", "report", "all"])
     ap.add_argument("--vault-dir", default=DEFAULT_VAULT)
     ap.add_argument("--out-dir", default=DEFAULT_OUT_DIR)
     ap.add_argument("--questions", default=None)
@@ -151,10 +174,12 @@ def main() -> int:
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--no-gbrain", action="store_true")
     ap.add_argument("--fail-on-leakage", action="store_true")
+    ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
     return {
         "export": cmd_export, "questions": cmd_questions, "baseline": cmd_baseline,
-        "run": cmd_run, "evaluate": cmd_evaluate, "report": cmd_report, "all": cmd_all,
+        "manual-template": cmd_manual_template, "run": cmd_run, "evaluate": cmd_evaluate,
+        "report": cmd_report, "all": cmd_all,
     }[args.command](args)
 
 

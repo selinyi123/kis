@@ -48,3 +48,63 @@ decision: keep_readonly   (harness + safety ready; real-GBrain vs baseline verdi
 
 ## 边界确认（未做，符合要求）
 未引入：生产接入 / 自动写回 / 自动 canonical / MemOS / 外部数据入口 / 把 GBrain 当事实源。
+
+---
+
+# KIS-016R — Real GBrain Quality Run（状态：BLOCKED / PENDING）
+
+```
+KIS-016R status: BLOCKED — real GBrain not available on this machine
+real_gbrain: NOT EXECUTED
+  - PATH:  no `gbrain` binary
+  - pip:   no `gbrain` package
+  - npm:   no global gbrain
+  - subprocess adapter attempted -> AdapterUnavailable -> graceful degrade (baseline/report only)
+questions_total: 20 (prepared)
+exported_files: 96 · baseline_results: 20 · manual_template: ready (20 stubs)
+citation_traceability: pending (no real answers)
+sensitive_leakage_count: pending
+wrong_relation_count: pending
+baseline_overlap: pending
+answer_usefulness_score: pending
+decision: PENDING  (NOT A/B/C — a real-GBrain verdict requires real GBrain output)
+next: 提供真实 GBrain 结果后评测（二选一，见下）
+```
+
+## 为什么没有 A/B/C
+A/B/C 必须基于**真实 GBrain** 对 20 问题的回答。本机无任何可调用的 GBrain，**执行 Agent 不会
+伪造 GBrain 答案**（伪造将违背"GBrain 输出不能当事实源 / 可复现"，并使决策失真）。因此 KIS-016R
+冻结为 PENDING，KIS-016 的 keep_readonly 决策维持不变。
+
+## 已就绪的两条补全路径（拿到真实 GBrain 即可一键评测）
+**路径一 · subprocess（本机装了 GBrain CLI）**
+```
+python scripts/gbrain_trial.py export
+python scripts/gbrain_trial.py baseline
+python scripts/gbrain_trial.py run --adapter subprocess --limit 20
+python scripts/gbrain_trial.py evaluate --fail-on-leakage
+python scripts/gbrain_trial.py report
+```
+**路径二 · manual（在别处用真实 GBrain 跑，回填结果）**
+```
+python scripts/gbrain_trial.py export
+python scripts/gbrain_trial.py baseline
+python scripts/gbrain_trial.py manual-template      # 生成 20 题 stub JSONL
+# 用真实 GBrain 回答 20 题，把 answer/citations 填入：
+#   .kis/gbrain_trial/runs/latest/gbrain_manual_input.jsonl
+python scripts/gbrain_trial.py run --adapter manual
+python scripts/gbrain_trial.py evaluate --fail-on-leakage
+python scripts/gbrain_trial.py report
+```
+评测产物：`.kis/gbrain_trial/runs/latest/{evaluation.json, relation_audit.json, leakage_audit.json, trial_report.md}`。
+
+## 决策标准（评测后据此判 A/B/C）
+- **A 进 KIS-017**：citation_traceability ≥ 0.95 且 leakage == 0 且 wrong_relation ≤ 1 且
+  missing_source_rate ≤ 0.10 且 usefulness 明显高于 baseline。
+- **B 保持 read-only**：traceability 合格但 usefulness 提升不明显 / 少量错误关系 / 冲突陈旧提示不足 /
+  baseline_overlap 过高（增益有限）。
+- **C 放弃 GBrain**：leakage > 0 / 引用导出目录外内容 / 大量无来源断言 / 错误关系污染 / 不能稳定复现。
+
+## KIS-016R 新增（真实交付，非伪造）
+`scripts/gbrain_trial.py manual-template`（生成可回填的 20 题 stub）+ 对应测试。其余安全/框架不变。
+

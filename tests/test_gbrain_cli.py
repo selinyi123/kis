@@ -46,6 +46,20 @@ class TestGbrainCli(unittest.TestCase):
                      ("evaluate",), ("report",)):
             self.assertEqual(self._run(*argv), 0, argv)
 
+    def test_manual_template_then_manual_run(self):
+        import json
+        self._run("export")
+        self._run("baseline")
+        self.assertEqual(self._run("manual-template"), 0)
+        tmpl = os.path.join(self.out, "runs", "latest", "gbrain_manual_input.jsonl")
+        self.assertTrue(os.path.exists(tmpl))
+        with open(tmpl, encoding="utf-8") as fh:
+            rows = [json.loads(ln) for ln in fh if ln.strip()]
+        self.assertEqual(len(rows), 20)
+        self.assertTrue(all("answer" in r and "citations" in r for r in rows))
+        # a filled template is consumable by the manual adapter
+        self.assertEqual(self._run("run", "--adapter", "manual"), 0)
+
 
 if __name__ == "__main__":
     unittest.main()
