@@ -1,6 +1,7 @@
 # KIS local artifacts
 data/
-.kis/          # KIS-016 GBrain trial artifacts (exports, runs, reports) — never committed
+# KIS-016 GBrain trial artifacts (exports, runs, reports) — never committed
+.kis/
 *.db
 *.db-journal
 *.db-wal
