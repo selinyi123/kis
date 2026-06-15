@@ -3,7 +3,9 @@
 > 本文件是 KIS 项目状态的唯一事实源（沿用 ClipVault 纪律）。每次切片完成后更新。
 
 ## 当前状态（2026-06-15）
-- **阶段**：**v0.3.1 已交付** — 人工确认队列 / Review Gate（KIS-014）：derived（建议）→ 人工确认 → canonical（事实），生命周期闭环。
+- **阶段**：**v0.3.2 已交付** — 只读 Obsidian 审阅看板（KIS-015）。**schema 不变（仍 0.3.1）**，纯视图层。
+- **v0.3.2 实测**：新增 `src/kis/dashboard/`（models/selectors/stats/commands/render）+ `scripts/build_review_dashboard.py`（`--dry-run/--only/--limit/--obsidian-dir/--db-path`）+ 2 文档。生成 7 页到 `<obsidian-dir>/Dashboards/`（总览/Inbox/Canonical Candidates/Archive Candidates/Deferred/Rejected/Stats）。**铁律：只读——不改 store/lifecycle/review；Inbox 页零 approve；canonical 候选只取 reviewed+(critical|hot)+(integrate|test)；建议命令仅复制不执行；dry-run 不写盘；build_pages 幂等；离线**。实测 cards=83 queue{inbox80/reviewed1/canonical1/archived1}；canonical_candidates=1，archive_candidates=31。**113/113 pytest 全绿**（+25：selectors/stats/render/cli/safety；零网络/零 LLM/零 ResourceWarning）。验收报告 docs/KIS-015_ACCEPTANCE.md。
+- **阶段（历史）**：v0.3.1 Review Gate（KIS-014）；v0.3.0 派生加工层。
 - **v0.3.1 实测**：schema 0.3.0→**0.3.1**（lifecycle.state 扩展 reviewed/canonical/rejected/deferred；新增可选 `review` 审计对象）。新增 `src/kis/review/`（policy/models/actions/queue/export）+ `scripts/review_cards.py` + 3 文档。**铁律：canonical 只能 reviewed→approve 显式人工产生；review 只写 lifecycle+review（assert_review_only 锁定 source/content/enrichment/linkage/safety/derived）；blocked 不入队；reason 非空；reviewer 默认 human；幂等 + 乐观版本锁；离线**。实测：inbox→reviewed→canonical 走通，archive 走通，**inbox→canonical 被拒**，export canonical OK。queue{inbox81/canonical1/archived1}。**88/88 pytest 全绿**（+27：policy/store/cli/obsidian/immutability；零网络/零 LLM/零 ResourceWarning）。验收报告见 docs/KIS-014_ACCEPTANCE.md。
 - 设计说明：生命周期状态沿用 `lifecycle.state`（未新增 status 字段避免双状态不一致）；`review.previous_status/next_status` 记录迁移；`lifecycle.version` 作乐观锁。
 - **阶段（历史）**：v0.3.0 AI 派生加工层。

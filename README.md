@@ -18,6 +18,13 @@ python scripts/review_cards.py export --status canonical --format md
 ```
 生命周期：`inbox → reviewed → canonical / archived / deferred / rejected`。见 [docs/KIS-014_LIFECYCLE_POLICY.md](docs/KIS-014_LIFECYCLE_POLICY.md)。
 
+只读审阅看板（KIS-015）：
+```powershell
+python scripts/build_review_dashboard.py --obsidian-dir "D:\TOOL\OBSIDIAN\Home\prompt仓库\KIS 知识情报系统"
+python scripts/build_review_dashboard.py --dry-run
+```
+生成 7 页到 `Dashboards/`（总览/Inbox/Canonical/Archive/Deferred/Rejected/Stats）。看板只读、只给建议命令；状态变更仍走 review CLI。见 [docs/KIS-015_REVIEW_DASHBOARD.md](docs/KIS-015_REVIEW_DASHBOARD.md)。
+
 ```
 采集: GitHub Stars / Browser Bookmarks / Single Web URL ──▶ KnowledgeCard(v0.3.0)
         ──▶ 分类 / SSRF / blocked 拦截 ──▶ SQLite + 事件日志 ──▶ Obsidian

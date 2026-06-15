@@ -51,8 +51,12 @@
   * canonical 仅人工 approve；review 只写 lifecycle+review；blocked 不入队；幂等 + 乐观锁；离线
   * schema 0.3.1（lifecycle.state 扩展 + 可选 review 审计对象）
 
+### v0.3.2（已完成）
+- [x] KIS-015 Review UI / Obsidian Dashboard：7 页只读看板（总览/Inbox/Canonical/Archive/Deferred/Rejected/Stats）
+  * `src/kis/dashboard/`（selectors/stats/commands/render）+ `scripts/build_review_dashboard.py`
+  * 只读（不改 store/lifecycle/review）；Inbox 零 approve；canonical 候选仅来自 reviewed；dry-run/幂等/离线
+
 ### 下一阶段（用户定）
-- [ ] KIS-015 Review UI / Obsidian dashboard
 - [ ] KIS-016 GBrain read-only trial
 - [ ] KIS-017 Memory benchmark via Prompt Engine
 - [ ] KIS-018 External inbox ingestion

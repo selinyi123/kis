@@ -178,6 +178,11 @@ class Store:
         rows = self.conn.execute("SELECT card_json FROM cards ORDER BY source_type, created_at").fetchall()
         return [json.loads(r["card_json"]) for r in rows]
 
+    def load_dashboard_cards(self, limit: int | None = None) -> list[dict[str, Any]]:
+        """Read-only load for the KIS-015 dashboard. Never mutates anything."""
+        cards = self.all_cards()
+        return cards[:limit] if limit else cards
+
     def save_enrichment(self, card: dict[str, Any]) -> None:
         """Persist the derived layer WITHOUT the content_hash idempotency gate.
 
