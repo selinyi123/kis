@@ -1,13 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://kis.local/schema/knowledge-card-0.3.0.json",
+  "$id": "https://kis.local/schema/knowledge-card-0.3.1.json",
   "title": "KnowledgeCard",
-  "description": "KIS unified knowledge asset. v0.3.0 frozen schema. Unknown fields are rejected (additionalProperties:false) per PPE contract discipline. 0.2.x added multi-source ingest + provenance + extraction. 0.3.0 adds the optional `derived` AI-enrichment layer (KIS-013): summary/value scoring/project relevance/next action. derived is a DERIVED layer — it never mutates source/content/enrichment and is never treated as fact (evidence stays in generator metadata).",
+  "description": "KIS unified knowledge asset. v0.3.1 frozen schema. Unknown fields are rejected (additionalProperties:false). 0.2.x: multi-source ingest + provenance + extraction. 0.3.0: optional `derived` AI layer (KIS-013). 0.3.1: human review gate (KIS-014) — lifecycle.state gains reviewed/canonical/rejected/deferred (lifecycle.state IS the lifecycle status), plus an optional `review` record. canonical is produced ONLY by an explicit human command; review writes ONLY lifecycle + review, never source/content/enrichment/linkage/safety/derived.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "id", "content_hash", "source", "content", "enrichment", "linkage", "lifecycle", "safety"],
   "properties": {
-    "schema_version": { "type": "string", "enum": ["0.3.0"] },
+    "schema_version": { "type": "string", "enum": ["0.3.1"] },
     "id": { "type": "string", "description": "Deterministic stable id kc_<16hex> = sha256(source_type|normalized_url). Idempotent across re-runs." },
     "content_hash": { "type": "string", "description": "sha256 hex of content fingerprint; changes when source content changes (update tracking)." },
     "source": {
@@ -78,7 +78,7 @@
       "additionalProperties": false,
       "required": ["state", "created_at", "updated_at", "version"],
       "properties": {
-        "state": { "type": "string", "enum": ["inbox", "cleaned", "enriched", "linked", "archived", "stale", "quarantine"] },
+        "state": { "type": "string", "enum": ["inbox", "cleaned", "enriched", "linked", "archived", "stale", "quarantine", "reviewed", "canonical", "rejected", "deferred"] },
         "created_at": { "type": "string" },
         "updated_at": { "type": "string" },
         "last_checked_at": { "type": "string" },
@@ -136,6 +136,23 @@
             "error": { "type": "string" }
           }
         }
+      }
+    },
+    "review": {
+      "type": "object",
+      "description": "Human review record (KIS-014). Present once a review decision is made. canonical requires an explicit human approve command.",
+      "additionalProperties": false,
+      "required": ["decision", "reason", "reviewer", "reviewed_at", "previous_status", "next_status", "source_hash", "derived_hash", "review_hash"],
+      "properties": {
+        "decision": { "type": "string", "enum": ["reviewed", "approve_canonical", "archive", "defer", "reject"] },
+        "reason": { "type": "string" },
+        "reviewer": { "type": "string" },
+        "reviewed_at": { "type": "string" },
+        "previous_status": { "type": "string" },
+        "next_status": { "type": "string" },
+        "source_hash": { "type": "string" },
+        "derived_hash": { "type": "string" },
+        "review_hash": { "type": "string" }
       }
     }
   }

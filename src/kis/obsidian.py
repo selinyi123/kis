@@ -111,6 +111,31 @@ def _derived_section(card: dict[str, Any]) -> list[str]:
     return out
 
 
+def _review_section(card: dict[str, Any]) -> list[str]:
+    """Render the human Review block (KIS-014). Never rewrites source/derived —
+    it reports lifecycle status + the audit record only."""
+    status = card["lifecycle"].get("state", "inbox")
+    r = card.get("review")
+    out = ["", "## Review"]
+    if not r:
+        out += [f"- Status: {status}", "- Decision: pending", ""]
+        return out
+    reason = (r.get("reason") or "").replace("|", "\\|")
+    out += [
+        "", "| Field | Value |", "|---|---|",
+        f"| Status | {status} |",
+        f"| Decision | {r.get('decision')} |",
+        f"| Reviewer | {r.get('reviewer')} |",
+        f"| Reviewed At | {r.get('reviewed_at')} |",
+        f"| Reason | {reason} |",
+        f"| Source Hash | {r.get('source_hash')} |",
+        f"| Derived Hash | {r.get('derived_hash')} |",
+        f"| Review Hash | {r.get('review_hash')} |",
+        "",
+    ]
+    return out
+
+
 def render_card_md(card: dict[str, Any]) -> str:
     """Generic renderer (used by GitHub Stars and any rich-body card)."""
     enr, link, src = card["enrichment"], card["linkage"], card["source"]
@@ -123,6 +148,7 @@ def render_card_md(card: dict[str, Any]) -> str:
     if proj_links:
         out += ["**关联项目**: " + " ".join(proj_links), ""]
     out += _derived_section(card)
+    out += _review_section(card)
     return "\n".join(out)
 
 
@@ -136,6 +162,7 @@ def render_bookmark_md(card: dict[str, Any]) -> str:
     if proj_links:
         out += ["", "**关联项目**: " + " ".join(proj_links), ""]
     out += _derived_section(card)
+    out += _review_section(card)
     return "\n".join(out)
 
 
@@ -148,6 +175,7 @@ def render_webclip_md(card: dict[str, Any]) -> str:
     if proj_links:
         out += ["", "**关联项目**: " + " ".join(proj_links), ""]
     out += _derived_section(card)
+    out += _review_section(card)
     return "\n".join(out)
 
 

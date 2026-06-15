@@ -2,8 +2,11 @@
 
 > 本文件是 KIS 项目状态的唯一事实源（沿用 ClipVault 纪律）。每次切片完成后更新。
 
-## 当前状态（2026-06-14）
-- **阶段**：**v0.3.0 已交付** — AI 派生加工层（KIS-013）：摘要 + 价值评分 + 项目相关度 + next_action，确定性 heuristic 基线 + 可选 LLM provider。
+## 当前状态（2026-06-15）
+- **阶段**：**v0.3.1 已交付** — 人工确认队列 / Review Gate（KIS-014）：derived（建议）→ 人工确认 → canonical（事实），生命周期闭环。
+- **v0.3.1 实测**：schema 0.3.0→**0.3.1**（lifecycle.state 扩展 reviewed/canonical/rejected/deferred；新增可选 `review` 审计对象）。新增 `src/kis/review/`（policy/models/actions/queue/export）+ `scripts/review_cards.py` + 3 文档。**铁律：canonical 只能 reviewed→approve 显式人工产生；review 只写 lifecycle+review（assert_review_only 锁定 source/content/enrichment/linkage/safety/derived）；blocked 不入队；reason 非空；reviewer 默认 human；幂等 + 乐观版本锁；离线**。实测：inbox→reviewed→canonical 走通，archive 走通，**inbox→canonical 被拒**，export canonical OK。queue{inbox81/canonical1/archived1}。**88/88 pytest 全绿**（+27：policy/store/cli/obsidian/immutability；零网络/零 LLM/零 ResourceWarning）。验收报告见 docs/KIS-014_ACCEPTANCE.md。
+- 设计说明：生命周期状态沿用 `lifecycle.state`（未新增 status 字段避免双状态不一致）；`review.previous_status/next_status` 记录迁移；`lifecycle.version` 作乐观锁。
+- **阶段（历史）**：v0.3.0 AI 派生加工层。
 - **v0.3.0 实测**：schema 0.2.2→**0.3.0**（新增可选 `derived` 层，含 generator 溯源 input_hash/prompt_hash/output_hash/model/generated_at）。新增 `src/kis/enrich/`（scoring/summary/project_relevance/prompt_contract/heuristic + providers/{base,mock,openai}）+ `scripts/enrich_cards.py` + `docs/KIS-013_PROMPT_INJECTION_BOUNDARY.md`。**铁律：derived 永不改 source/provenance（assert_only_derived 逐字段锁定）；blocked 不加工；heuristic 全离线；LLM 可选；LLM 不是事实源**。实测对 82 卡跑 heuristic：processed=82 updated=82 errors=0；value_level{hot37/warm28/cold14/critical3}；next_action{integrate34/archive26/test9/read5/ignore7/monitor1}。idempotent（重跑 skipped_done=82）。auto+mock 实测产 llm_generated。**61/61 pytest 全绿**（+18：heuristic9/schema3/provider4/cli2；零网络、零 LLM、零 ResourceWarning）。
 - 注：blocked 卡片从不进 store（仅 _blocked JSONL），故 enrichment 的 skipped_blocked=0 是预期（无 blocked 卡可跳）。
 - **阶段（历史）**：v0.2c Crawl4AI 可选后端；v0.2b 单 URL+SSRF；v0.2a 书签；v0.1 Stars。

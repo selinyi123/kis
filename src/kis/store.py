@@ -197,6 +197,46 @@ class Store:
         })
         self.conn.commit()
 
+    # -- review (KIS-014) -----------------------------------------------------
+
+    def get_card(self, card_id: str) -> dict[str, Any] | None:
+        return self.get(card_id)
+
+    def list_review_candidates(self, **filters: Any) -> list[dict[str, Any]]:
+        """All cards passed through review-queue filters (blocked excluded)."""
+        from .review.queue import filter_cards
+        return filter_cards(self.all_cards(), **filters)
+
+    def save_review(self, card: dict[str, Any]) -> None:
+        """Persist a review decision with an optimistic version guard.
+
+        The card's lifecycle.version was already incremented by apply_review; the
+        on-disk version must equal version-1, else a concurrent write happened.
+        Only card_json / version / state columns change — never source data.
+        """
+        cid = card["id"]
+        row = self.conn.execute("SELECT card_json FROM cards WHERE id = ?", (cid,)).fetchone()
+        if row is None:
+            raise KeyError(f"card not found: {cid}")
+        on_disk_version = json.loads(row["card_json"])["lifecycle"]["version"]
+        new_version = int(card["lifecycle"]["version"])
+        if on_disk_version != new_version - 1:
+            raise RuntimeError(
+                f"optimistic lock conflict for {cid}: on-disk v{on_disk_version}, expected v{new_version - 1}"
+            )
+        self.conn.execute(
+            "UPDATE cards SET card_json = ?, version = ?, state = ? WHERE id = ?",
+            (json.dumps(card, ensure_ascii=False), new_version, card["lifecycle"]["state"], cid),
+        )
+        review = card.get("review", {})
+        self._log_event(cid, "review", {
+            "decision": review.get("decision"),
+            "previous_status": review.get("previous_status"),
+            "next_status": review.get("next_status"),
+            "review_hash": review.get("review_hash"),
+        })
+        self.conn.commit()
+
     def search(self, query: str, limit: int = 20) -> list[dict[str, Any]]:
         if self.fts_enabled:
             rows = self.conn.execute(

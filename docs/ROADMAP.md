@@ -45,10 +45,17 @@
   * schema 0.3.0 加 `derived`；prompt 注入边界文档；derived 永不改 source（assert_only_derived）
   * `enrich_cards.py --mode heuristic|llm|auto --provider --limit --dry-run --force --source-type --category`
 
+### v0.3.1（已完成）
+- [x] KIS-014 Review Queue / Human Confirmation Gate：inbox→reviewed→canonical/archived/deferred/rejected
+  * `src/kis/review/`（policy/models/actions/queue/export）+ `scripts/review_cards.py`
+  * canonical 仅人工 approve；review 只写 lifecycle+review；blocked 不入队；幂等 + 乐观锁；离线
+  * schema 0.3.1（lifecycle.state 扩展 + 可选 review 审计对象）
+
 ### 下一阶段（用户定）
-- [ ] **KIS-014 Review Queue / 人工确认队列**：inbox → reviewed → canonical → archived（LLM 判断须人工确认才入 canonical）
-- [ ] KIS-015 GBrain 只读试点
-- [ ] KIS-016 Memory Benchmark
+- [ ] KIS-015 Review UI / Obsidian dashboard
+- [ ] KIS-016 GBrain read-only trial
+- [ ] KIS-017 Memory benchmark via Prompt Engine
+- [ ] KIS-018 External inbox ingestion
 - [ ] MemOS 隔离实验
 
 ### 其它待办

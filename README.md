@@ -4,9 +4,19 @@
 
 > 不是更大的收藏夹，而是一个**知识运行时引擎**：采集 → 清洗 → 去重 → 摘要 → 分类 → 打标 → 价值评分 → 主题聚类 → 项目关联 → 更新跟踪 → 同步归档。
 
-## 当前状态：v0.3.0 三源 + AI 派生加工层 ✅
+## 当前状态：v0.3.1 三源 + AI 派生层 + 人工确认队列 ✅
 
-三个源：**GitHub Stars + 浏览器书签 + 单 URL 网页剪藏 → KnowledgeCard → SQLite(FTS5) → Obsidian**，叠加 **AI 派生加工层**（摘要 / 价值评分 / 项目相关度 / next_action）。派生层只读源、不当事实源、可复现可审计可回滚。
+三个源：**GitHub Stars + 浏览器书签 + 单 URL 网页剪藏 → KnowledgeCard → SQLite(FTS5) → Obsidian**，叠加 **AI 派生加工层**（摘要/评分/相关度），再叠加 **人工确认队列**（KIS-014）：derived 是建议，canonical 是人工确认的事实。
+
+```powershell
+# 审阅闭环：canonical 只能人工 approve 产生
+python scripts/review_cards.py list --status inbox
+python scripts/review_cards.py mark-reviewed --card-id <id> --reason "verified"
+python scripts/review_cards.py approve --card-id <id> --reason "promote after review"   # -> canonical
+python scripts/review_cards.py archive|defer|reject --card-id <id> --reason "..."
+python scripts/review_cards.py export --status canonical --format md
+```
+生命周期：`inbox → reviewed → canonical / archived / deferred / rejected`。见 [docs/KIS-014_LIFECYCLE_POLICY.md](docs/KIS-014_LIFECYCLE_POLICY.md)。
 
 ```
 采集: GitHub Stars / Browser Bookmarks / Single Web URL ──▶ KnowledgeCard(v0.3.0)
