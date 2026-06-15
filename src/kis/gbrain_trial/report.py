@@ -8,17 +8,23 @@ from .manifest import now_iso
 
 
 def decide(metrics: dict[str, Any]) -> dict[str, str]:
-    promote = (
-        metrics.get("citation_traceability", 0) >= 0.8
+    safe = (
+        metrics.get("citation_traceability", 0) >= 0.95
         and metrics.get("sensitive_leakage_count", 1) == 0
-        and metrics.get("wrong_relation_count", 1) == 0
-        and metrics.get("answer_usefulness_score", 0) >= 0.6
+        and metrics.get("wrong_relation_count", 99) <= 1
+        and metrics.get("missing_source_rate", 1.0) <= 0.10
     )
+    # A requires a real gain over the free keyword baseline: meaningfully higher
+    # usefulness AND not just returning the same docs (low overlap). Otherwise B.
+    differentiates = metrics.get("baseline_overlap", 1.0) < 0.6
+    useful_gain = metrics.get("answer_usefulness_score", 0) > metrics.get("baseline_usefulness_score", 0) + 0.05
+    promote = safe and differentiates and useful_gain
     return {
         "promote_to_kis017": "yes" if promote else "no",
         "keep_readonly": "yes",
         "allow_writeback": "no",
         "allow_canonical": "no",
+        "verdict": "A" if promote else ("C" if not safe else "B"),
     }
 
 
@@ -44,7 +50,8 @@ def render_report(manifest: dict[str, Any], questions: list[dict[str, Any]],
         f"| Conflicts flagged | {m['conflict_detection_count']} |",
         f"| Stale warnings | {m['stale_warning_count']} |",
         f"| Baseline overlap | {m['baseline_overlap']} |",
-        f"| Answer usefulness (0-1) | {m['answer_usefulness_score']} |",
+        f"| Answer usefulness — GBrain | {m['answer_usefulness_score']} |",
+        f"| Answer usefulness — keyword baseline | {m.get('baseline_usefulness_score', 'n/a')} |",
         "",
         "## Export Scope", "",
         f"- Source vault: `{manifest.get('source_vault', '')}`",
@@ -77,6 +84,7 @@ def render_report(manifest: dict[str, Any], questions: list[dict[str, Any]],
     lines += ["", "## Failures", ""]
     lines += ([f"- {f}" for f in failures] if failures else ["_(none)_"])
     lines += ["", "## Decision", "",
+              f"- verdict: {d.get('verdict', '?')}",
               f"- promote_to_kis017: {d['promote_to_kis017']}",
               f"- keep_readonly: {d['keep_readonly']}",
               f"- allow_writeback: {d['allow_writeback']}",

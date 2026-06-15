@@ -124,3 +124,43 @@ python scripts/gbrain_trial.py report
 1. 用户设嵌入 provider key（任一）：`ZEROENTROPY_API_KEY` / 或切 `gbrain config set embedding_model openai:text-embedding-3-large` + `OPENAI_API_KEY` / 或 `VOYAGE_API_KEY`。
 2. 我跑：`gbrain embed --all`（嵌入 96 页，付费）→ `gbrain query` 跑 20 题 → `scripts/gbrain_trial.py run --adapter subprocess`(指向真实 binary)→ `evaluate --fail-on-leakage` → `report` → 据指标给 **A/B/C**。
 
+## KIS-016R 真实 GBrain 跑完结果（2026-06-15，**Ollama-first 免费本地**）
+最终改判为 Ollama-first（OpenAI 暂停）。装 **Ollama 0.30.6 + nomic-embed-text(768d)**；GBrain 原生支持
+`ollama:` embedding provider（本地、$0、无 key）。`reinit-pglite` 切到 ollama + 直接改 `~/.gbrain/config.json`
+(embedding_disabled:false/embedding_model/embedding_dimensions，因 config set 写 DB 平面被 embed 管线忽略)
+→ `embed --all` 262 chunks/96 页 → 真实 `gbrain query` 跑 **20 题**。
+
+**结果（真实 GBrain，免费本地）：**
+```
+real_gbrain: subprocess (Ollama/nomic-embed-text 768d)
+questions_total: 20
+citation_traceability: 1.0
+missing_source_rate: 0.0
+sensitive_leakage_count: 0
+wrong_relation_count: 0
+baseline_overlap: 0.70
+answer_usefulness_score (GBrain): 0.79
+answer_usefulness_score (keyword baseline): 0.79   ← 持平
+store_immutability: pass · obsidian_immutability: pass · no_writeback: pass · no_auto_canonical: pass
+decision: verdict=B  (keep_readonly=yes, promote_to_kis017=no, writeback=no, canonical=no)
+```
+
+**判 B 的理由（诚实）：** GBrain 在**安全性**上完全合格（引用全可追溯、零泄漏、零错误关系、不写回），
+但在这个 **96 页、以 KIS 自身文档为主**的小语料上**没有跑赢免费关键词 baseline**：usefulness 持平
+（0.79=0.79），引用重叠 0.70。按用户 A 标准"usefulness 明显高于 baseline"未达成；命中 B 标准
+"提升不明显 / baseline_overlap 太高、增益有限"。**故保持 GBrain read-only，不进 KIS-017。**
+
+**两个试点期修复的真实 harness bug：** ① `_norm` 未折叠连续分隔符（`KIS … - 主页` 误成 `---`）→ 假性
+traceability=0/leakage=3；② `baseline_overlap` 比对未归一化（slug vs export-rel）→ 假性 0.0。修后
+traceability=1.0、overlap=0.70。
+
+**016R-A/B/C 三层结论：** 016R-A（本地免费 embedding 是否优于 keyword baseline）→ **暂否**（持平）；
+016R-B（GBrain 是否支持本地 embedding 并可用）→ **是**（ollama 原生、安全可用）；016R-C（付费是否显著更好）
+→ **未测**（按计划 DashScope 仅在需要时做 3 问付费对照；BGE-M3 留 KIS-017）。
+
+**下一步（不是 KIS-017）：** 维持 read-only；若要再判 A，需更难的问题集（keyword 会失败的跨项目/语义题）、
+更大语料、或换 `large`/BGE-M3 嵌入对照——这些属 KIS-017 的 benchmark 范畴。
+
+**环境产物（本机，非 repo）：** Bun+gbrain 在 `~/.bun`；脑库 `~/.gbrain`；Ollama 服务 + nomic-embed-text；
+暂存 `~/kis_gbrain_stage`、`C:\gbtest`。可保留（KIS-017 复用）或卸载清理。
+

@@ -122,7 +122,17 @@ def cmd_evaluate(args):
     manifest = _load_manifest(mpath)
     answers = runner.load_jsonl(os.path.join(run_dir, "gbrain_results.jsonl"))
     baseline = runner.load_jsonl(os.path.join(run_dir, "baseline_results.jsonl"))
-    ev = evaluator.evaluate(answers, _load_questions(args.questions), manifest, baseline)
+    questions = _load_questions(args.questions)
+    ev = evaluator.evaluate(answers, questions, manifest, baseline)
+    # Fair comparison: score the keyword baseline as if it were answers, so the
+    # A/B/C verdict can require a real gain over the free baseline.
+    base_answers = [{"question_id": b["question_id"], "question": b["question"],
+                     "answer": (b.get("results") or [{}])[0].get("snippet", "unknown — no source"),
+                     "citations": [{"path": r["path"]} for r in b.get("results", [])]}
+                    for b in baseline]
+    base_ev = evaluator.evaluate(base_answers, questions, manifest, baseline)
+    ev["metrics"]["baseline_usefulness_score"] = base_ev["metrics"]["answer_usefulness_score"]
+    ev["metrics"]["baseline_traceability"] = base_ev["metrics"]["citation_traceability"]
     os.makedirs(run_dir, exist_ok=True)
     for fn, obj in (("evaluation.json", ev), ("relation_audit.json", ev["relation_audit"]),
                     ("leakage_audit.json", ev["leakage_audit"])):

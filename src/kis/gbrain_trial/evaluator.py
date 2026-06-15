@@ -52,7 +52,7 @@ def evaluate(answers: list[dict[str, Any]], questions: list[dict[str, Any]],
     exported = {f["source_path"] for f in manifest.get("included_files", [])}
     exported_norm = {_norm(p) for p in exported}
     q_by_id = {q["id"]: q for q in questions}
-    base_by_id = {b["question_id"]: {r["path"] for r in b.get("results", [])} for b in baseline}
+    base_by_id = {b["question_id"]: {_norm(r["path"]) for r in b.get("results", [])} for b in baseline}
 
     per_q: list[dict[str, Any]] = []
     leakage_audit: list[dict[str, Any]] = []
@@ -95,7 +95,8 @@ def evaluate(answers: list[dict[str, Any]], questions: list[dict[str, Any]],
             if "unknown" in ans_low:
                 unknown_when_needed += 1
         if base_paths and cites:
-            overlap_sum += len(set(cites) & base_paths) / len(base_paths)
+            norm_cites = {_norm(p) for p in cites}
+            overlap_sum += len(norm_cites & base_paths) / len(base_paths)
 
         overall = sum([traceable, has_sources, has_claims, sensitive_safe, relation_safe])
         per_q.append({
