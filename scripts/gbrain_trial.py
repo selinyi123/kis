@@ -52,13 +52,13 @@ def _load_manifest(mpath: str):
         return json.load(fh)
 
 
-def _build_adapter(name: str, export_dir: str, run_dir: str):
+def _build_adapter(name: str, export_dir: str, run_dir: str, gbrain_binary: str = "gbrain"):
     if name == "mock":
         return MockGBrainAdapter(export_dir)
     if name == "manual":
         return ManualGBrainAdapter(os.path.join(run_dir, "gbrain_manual_input.jsonl"))
     if name == "subprocess":
-        return SubprocessGBrainAdapter(export_dir)
+        return SubprocessGBrainAdapter(export_dir, binary=gbrain_binary)
     raise SystemExit(f"unknown adapter: {name}")
 
 
@@ -107,7 +107,7 @@ def cmd_manual_template(args):
 
 def cmd_run(args):
     export_dir, _, run_dir = _paths(args.out_dir)
-    adapter = _build_adapter(args.adapter, export_dir, run_dir)
+    adapter = _build_adapter(args.adapter, export_dir, run_dir, getattr(args, "gbrain_binary", "gbrain"))
     try:
         rows = runner.run_gbrain(adapter, _load_questions(args.questions), run_dir, export_dir, args.limit)
         print(f"[kis] gbrain({args.adapter}): {len(rows)} answers -> {run_dir}/gbrain_results.jsonl")
@@ -175,6 +175,8 @@ def main() -> int:
     ap.add_argument("--no-gbrain", action="store_true")
     ap.add_argument("--fail-on-leakage", action="store_true")
     ap.add_argument("--force", action="store_true")
+    ap.add_argument("--gbrain-binary", dest="gbrain_binary", default="gbrain",
+                    help="Path to the real gbrain CLI (subprocess adapter)")
     args = ap.parse_args()
     return {
         "export": cmd_export, "questions": cmd_questions, "baseline": cmd_baseline,

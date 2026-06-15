@@ -17,13 +17,18 @@ _SECRET_RE = re.compile(
 _PATH_DENY = tuple(t for t in DENY_TOKENS if t != ".env")
 
 
+_NORM_SEP = re.compile(r"[^0-9a-z一-鿿/]+")
+
+
 def _norm(path: str) -> str:
     """Normalize a citation/source path so GBrain slugs ('github-stars/x') match
-    export source paths ('GitHub-Stars/x.md'): lowercase, drop .md, spaces->-."""
+    export source paths ('GitHub-Stars/X.md'). Mirrors GBrain slugging: lowercase,
+    drop .md, collapse any run of non-word chars (except '/') to a single '-'."""
     p = (path or "").strip().lower()
     if p.endswith(".md"):
         p = p[:-3]
-    return p.replace(" ", "-")
+    p = _NORM_SEP.sub("-", p)
+    return "-".join(seg.strip("-") for seg in p.split("/"))
 
 
 def _citation_paths(ans: dict[str, Any]) -> list[str]:

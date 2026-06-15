@@ -2,6 +2,9 @@
 data/
 # KIS-016 GBrain trial artifacts (exports, runs, reports) — never committed
 .kis/
+# API keys (KIS-016R local key file) — never committed
+*.key
+openai.key
 *.db
 *.db-journal
 *.db-wal
