@@ -108,3 +108,19 @@ python scripts/gbrain_trial.py report
 ## KIS-016R 新增（真实交付，非伪造）
 `scripts/gbrain_trial.py manual-template`（生成可回填的 20 题 stub）+ 对应测试。其余安全/框架不变。
 
+## KIS-016R 真实 GBrain 安装进度（2026-06-15，用户授权"装到导入为止"）
+**已完成（key-free）：**
+- 装 **Bun 1.3.14**（`~/.bun`）+ **gbrain 0.42.44**（`bun install -g github:garrytan/gbrain`，binary `~/.bun/bin/gbrain.exe`）。
+- `gbrain init --pglite --no-embedding` 建脑（PGLite，**未开 cron/daemon**）。脑库在 GBrain 全局位置（不在 repo，不在 .kis）。
+- `gbrain import <staged> --no-embed` 导入 **96 页 / 262 chunks**（0 错误）。
+- 真实 CLI 已摸清：`import <dir>` / `query <q>` / `search <q>`（输出 `[score] slug -- snippet`，无 `--json`）。
+- 已把 `SubprocessGBrainAdapter` 重写为真实 `gbrain query` + 解析器；`evaluator` 加 slug↔path 归一化；**150/150 pytest**。
+
+**踩坑修复：** GBrain 的 `import` 在含空格路径（`Work Program`）下 `collect_files=0`；改为复制到无空格暂存目录后导入成功（96/96）。
+
+**停在这里（付费门槛）：** `gbrain config` 显示 embedding_model 默认 `zeroentropyai:zembed-1`，但**未配 key** → `gbrain embed --all` 与语义 `query` 无法运行。这正是用户要停下等 key 的"付费查询"步。
+
+**给 key 后一键完成（我来跑）：**
+1. 用户设嵌入 provider key（任一）：`ZEROENTROPY_API_KEY` / 或切 `gbrain config set embedding_model openai:text-embedding-3-large` + `OPENAI_API_KEY` / 或 `VOYAGE_API_KEY`。
+2. 我跑：`gbrain embed --all`（嵌入 96 页，付费）→ `gbrain query` 跑 20 题 → `scripts/gbrain_trial.py run --adapter subprocess`(指向真实 binary)→ `evaluate --fail-on-leakage` → `report` → 据指标给 **A/B/C**。
+

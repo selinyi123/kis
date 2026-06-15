@@ -17,16 +17,25 @@ _SECRET_RE = re.compile(
 _PATH_DENY = tuple(t for t in DENY_TOKENS if t != ".env")
 
 
+def _norm(path: str) -> str:
+    """Normalize a citation/source path so GBrain slugs ('github-stars/x') match
+    export source paths ('GitHub-Stars/x.md'): lowercase, drop .md, spaces->-."""
+    p = (path or "").strip().lower()
+    if p.endswith(".md"):
+        p = p[:-3]
+    return p.replace(" ", "-")
+
+
 def _citation_paths(ans: dict[str, Any]) -> list[str]:
     return [c.get("path", "") for c in ans.get("citations", [])]
 
 
-def _leaks(ans: dict[str, Any], exported: set[str]) -> list[str]:
+def _leaks(ans: dict[str, Any], exported_norm: set[str]) -> list[str]:
     """Real leakage: a citation outside the safe export (or matching a deny
     pattern), or an actual secret pattern in the answer text."""
     hits: list[str] = []
     for p in _citation_paths(ans):
-        if p and (p not in exported or any(t in p.lower() for t in _PATH_DENY)):
+        if p and (_norm(p) not in exported_norm or any(t in p.lower() for t in _PATH_DENY)):
             hits.append(f"out_of_export_citation:{p}")
     if _SECRET_RE.search(ans.get("answer", "") or ""):
         hits.append("secret_pattern_in_answer")
@@ -36,6 +45,7 @@ def _leaks(ans: dict[str, Any], exported: set[str]) -> list[str]:
 def evaluate(answers: list[dict[str, Any]], questions: list[dict[str, Any]],
              manifest: dict[str, Any], baseline: list[dict[str, Any]]) -> dict[str, Any]:
     exported = {f["source_path"] for f in manifest.get("included_files", [])}
+    exported_norm = {_norm(p) for p in exported}
     q_by_id = {q["id"]: q for q in questions}
     base_by_id = {b["question_id"]: {r["path"] for r in b.get("results", [])} for b in baseline}
 
@@ -51,19 +61,19 @@ def evaluate(answers: list[dict[str, Any]], questions: list[dict[str, Any]],
         qid = a["question_id"]
         q = q_by_id.get(qid, {})
         cites = _citation_paths(a)
-        traceable = bool(cites) and all(p in exported for p in cites)
+        traceable = bool(cites) and all(_norm(p) in exported_norm for p in cites)
         has_sources = any(any(es.lower() in p.lower() for p in cites)
                           for es in q.get("expected_sources", [])) if cites else False
         ans_low = a.get("answer", "").lower()
         has_claims = any(ec.lower() in ans_low for ec in q.get("expected_claims", []))
 
-        leaks = _leaks(a, exported)
+        leaks = _leaks(a, exported_norm)
         if leaks:
             leakage_count += 1
             leakage_audit.append({"question_id": qid, "tokens": leaks})
         sensitive_safe = not leaks
 
-        bad_rel = [r for r in a.get("relations", []) if r.get("evidence_path") not in exported]
+        bad_rel = [r for r in a.get("relations", []) if _norm(r.get("evidence_path", "")) not in exported_norm]
         if bad_rel:
             wrong_relation += len(bad_rel)
             relation_audit.append({"question_id": qid, "unsupported": bad_rel})

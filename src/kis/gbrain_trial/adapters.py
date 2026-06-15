@@ -105,24 +105,54 @@ class ManualGBrainAdapter:
             relations=rec.get("relations", []), raw={"backend": "manual"})
 
 
+import re as _re
+
+# GBrain `query`/`search` CLI line: "[0.8748] some/slug -- snippet text"
+_GBRAIN_LINE = _re.compile(r"^\[(?P<score>\d*\.?\d+)\]\s+(?P<slug>\S+)\s+--\s+(?P<snip>.*)$")
+
+
+def parse_gbrain_query_output(text: str) -> list[dict[str, Any]]:
+    """Parse real `gbrain query` text output into citation dicts (path=slug)."""
+    cites: list[dict[str, Any]] = []
+    for line in (text or "").splitlines():
+        m = _GBRAIN_LINE.match(line.strip())
+        if m:
+            cites.append({"path": m.group("slug"), "quote_or_snippet": m.group("snip").strip(),
+                          "line_start": None, "line_end": None, "score": float(m.group("score"))})
+    return cites
+
+
 class SubprocessGBrainAdapter:
-    """Calls a local gbrain CLI if installed. Never used by the test suite."""
+    """Calls the real gbrain CLI. Brain is prepared out-of-band (init + import);
+    this adapter only queries. Uses `gbrain query <q> --limit N` and parses the
+    `[score] slug -- snippet` output into citations. Never used by mock tests."""
     name = "subprocess"
 
-    def __init__(self, export_dir: str, binary: str = "gbrain"):
+    def __init__(self, export_dir: str, binary: str = "gbrain", limit: int = 8, query_cmd: str = "query"):
         self.export_dir = export_dir
         self.binary = binary
+        self.limit = limit
+        self.query_cmd = query_cmd
+
+    def _resolve(self) -> str:
+        if os.path.isfile(self.binary):
+            return self.binary
+        found = shutil.which(self.binary)
+        if found:
+            return found
+        raise AdapterUnavailable(f"gbrain CLI not found: {self.binary}")
 
     def index(self, export_dir: str | None = None) -> None:
-        if shutil.which(self.binary) is None:
-            raise AdapterUnavailable(f"gbrain CLI not found on PATH: {self.binary}")
-        subprocess.run([self.binary, "index", export_dir or self.export_dir],
-                       check=True, capture_output=True, text=True)
+        self._resolve()  # verify availability; brain built out-of-band (init+import)
 
     def ask(self, question_id: str, question: str) -> GBrainAnswer:
-        out = subprocess.run([self.binary, "ask", "--json", question],
-                             check=True, capture_output=True, text=True)
-        data = json.loads(out.stdout or "{}")
-        return GBrainAnswer(question_id, question, data.get("answer", ""),
-                            citations=data.get("citations", []), entities=data.get("entities", []),
-                            relations=data.get("relations", []), raw=data)
+        exe = self._resolve()
+        out = subprocess.run([exe, self.query_cmd, question, "--limit", str(self.limit)],
+                             capture_output=True, text=True, encoding="utf-8")
+        cites = parse_gbrain_query_output(out.stdout)
+        answer = (f"Top {len(cites)} GBrain hit(s): {cites[0]['quote_or_snippet']}"
+                  if cites else "unknown — gbrain returned no result")
+        entities = [e for e in _KNOWN_ENTITIES if e.lower() in question.lower()]
+        return GBrainAnswer(question_id, question, answer, citations=cites, entities=entities,
+                            raw={"backend": "subprocess", "stdout": (out.stdout or "")[:2000],
+                                 "stderr": (out.stderr or "")[:500]})

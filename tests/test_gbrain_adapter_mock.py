@@ -13,6 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from kis.gbrain_trial.adapters import (  # noqa: E402
     AdapterUnavailable, ManualGBrainAdapter, MockGBrainAdapter, SubprocessGBrainAdapter,
+    parse_gbrain_query_output,
 )
 from kis.gbrain_trial.exporter import export_vault  # noqa: E402
 from gbrain_fixtures import make_vault  # noqa: E402
@@ -53,6 +54,15 @@ class TestAdapters(unittest.TestCase):
         a = SubprocessGBrainAdapter(self.export_dir, binary="definitely-not-a-real-binary-xyz")
         with self.assertRaises(AdapterUnavailable):
             a.index()
+
+    def test_parse_gbrain_query_output(self):
+        sample = ("[0.8748] github-stars/memtensor-memos -- memory OS for agents\n"
+                  "[0.63] 02-架构 -- KIS 架构\nnoise line without bracket\n")
+        cites = parse_gbrain_query_output(sample)
+        self.assertEqual(len(cites), 2)
+        self.assertEqual(cites[0]["path"], "github-stars/memtensor-memos")
+        self.assertEqual(cites[0]["score"], 0.8748)
+        self.assertIn("memory OS", cites[0]["quote_or_snippet"])
 
 
 if __name__ == "__main__":
