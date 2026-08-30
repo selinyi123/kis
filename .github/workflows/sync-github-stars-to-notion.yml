@@ -1,0 +1,42 @@
+name: Sync GitHub Stars to Notion
+
+on:
+  schedule:
+    # Avoid the top-of-hour congestion window for scheduled Actions.
+    - cron: "17,47 * * * *"
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "scripts/sync_github_stars_to_notion.py"
+      - "tests/test_github_stars_notion_sync.py"
+      - ".github/workflows/sync-github-stars-to-notion.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-stars-notion-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Unit tests
+        run: python -m unittest tests.test_github_stars_notion_sync
+
+      - name: Sync new stars
+        if: github.event_name != 'pull_request'
+        env:
+          GITHUB_USERNAME: selinyi123
+          GITHUB_TOKEN: ${{ github.token }}
+          NOTION_DATA_SOURCE_ID: 1c42c531-4691-4911-bccf-630a9366f744
+          NOTION_API_TOKEN: ${{ secrets.NOTION_API_TOKEN }}
+        run: python scripts/sync_github_stars_to_notion.py
