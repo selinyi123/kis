@@ -1,0 +1,17 @@
+{
+  "name": "github-stars-notion-sync-adapter",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "node --test --import tsx test/*.test.ts"
+  },
+  "dependencies": {
+    "@notionhq/client": "^2.3.0",
+    "@notionhq/workers": "latest"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  }
+}
