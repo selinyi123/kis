@@ -1,6 +1,10 @@
 name: github-stars-notion-sync-check
 
 on:
+  push:
+    paths:
+      - "tools/github-stars-notion-sync/**"
+      - ".github/workflows/github-stars-notion-sync-check.yml"
   pull_request:
     paths:
       - "tools/github-stars-notion-sync/**"
