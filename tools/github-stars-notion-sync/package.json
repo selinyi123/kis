@@ -5,6 +5,7 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
+    "setup": "NODE_OPTIONS=--disable-warning=DEP0040 node --import tsx scripts/setup.ts",
     "check": "tsc --noEmit",
     "test": "NODE_OPTIONS=--disable-warning=DEP0040 node --import tsx --test test/*.test.ts"
   },
